@@ -1,0 +1,16 @@
+<form class="form-horizontal" name="$ctrl.filterForm" ng-submit="$ctrl.applyFilterChange()" novalidate >
+	
+	<!-- List of filters -->
+	<div class="row col-sm-12" ng-include="'pages/ssv/components/bomFilter/multi-filters-tmpl.html'"></div>
+
+	<!-- Current filter name -->
+	<div class="row col-sm-12" ng-show="$ctrl.currentFilter" ng-include="'pages/ssv/components/bomFilter/filter-name-tmpl.html'"></div> 
+
+	<!-- Highlight/Greyout Controls  -->	
+	<div class="row col-sm-12 margin-bottom-20" ng-show="$ctrl.currentFilter" ng-include="'pages/ssv/components/bomFilter/highlight-greyout-tmpl.html'"></div>
+
+	<!-- Current Filter -->
+	<div class="row col-sm-12 margin-bottom-200" ng-show="$ctrl.currentFilter"  ng-include="'pages/ssv/components/bomFilter/filter-attributes-tmpl.html'"></div>
+	
+
+</form>

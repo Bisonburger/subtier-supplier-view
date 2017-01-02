@@ -1,0 +1,22 @@
+<div class="btn-toolbar" role="toolbar">
+	<div class="btn-group">
+		<button class="btn btn-default" ng-hide="$ctrl.sideBarOpen" ng-click="$ctrl.slideoutActive = 'BOM Filter'; $ctrl.openSidebar()">
+			<i class="fa fa-filter" tooltip-placement="right"></i> BOM Filter
+		</button>
+		<div class="btn-group">
+			<button class="btn btn-default dropdown-toggle" data-toggle="dropdown">		
+				<i class="fa fa-gear" tooltip-placement="right"></i> Configure View <span class="caret"></span>
+			</button>
+		  	<ul class="dropdown-menu">
+		  		<li><strong>Show/Hide Views</strong></li>
+    			<li>&nbsp;<input type="checkbox" ng-model="$ctrl.showDetail" /> Assembly Details</li>
+    			<li>&nbsp;<input type="checkbox" ng-model="$ctrl.showTable" /> Table</a></li>
+    			<li>&nbsp;<input type="checkbox" ng-model="$ctrl.showMinimap" /> MiniMap</a></li>
+    			<li role="separator" class="divider"></li>
+    			<li><a ng-click="$ctrl.expandCollapseAll()" ><i class="fa fa-sitemap" ></i> Expand/Collapse All Children</a></li>
+    			<li role="separator" class="divider"></li>
+    			<li><a ng-click="$ctrl.slideoutActive = 'BOM Configuration'; $ctrl.openSidebar()"><i class="fa fa-wrench" ></i> BOM Configuration...</a></li>
+  			</ul>			
+		</div>		
+	</div>
+</div>

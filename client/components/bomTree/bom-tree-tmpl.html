@@ -1,0 +1,46 @@
+<div id="canvas" ng-class="{'minimap-container': $ctrl.minimap, 'svg-container': !$ctrl.minimap }">
+    <svg style="max-width: 100%;" id="svgContent" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet" ng-class="{'svg-content-responsive': !$ctrl.minimap}">
+        <defs>
+        	<!-- Header gradient -->
+        	<linearGradient id=g1 x1=0% y1=0% x2=0% y2=100%>
+            	<stop stop-color=#333 offset=50%/>
+            	<stop stop-color=gray offset=100%/>
+        	</linearGradient>
+
+			<!-- Swimlane gradient -->
+        	<linearGradient id=g2 x1=0% y1=0% x2=100% y2=0%>
+            	<stop stop-color=#ddddbb offset=25% />
+            	<stop stop-color=darkkhaki offset=100% />
+        	</linearGradient>
+        	
+        	<filter id="dropShadowFilter" width="200%" height="200%">
+		      	<feOffset result="offOut" in="SourceGraphic" dx="10" dy="10" />
+      			<feColorMatrix result="matrixOut" in="offOut" type="matrix" values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
+      			<feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="10" />
+      			<feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
+    		</filter>
+
+    	</defs>
+    	
+        <g id="svgGroup" ng-attr-transform="translate( {{($ctrl.minimap)?$ctrl.TRANSLATE[0]:$ctrl.translate[0]}} , {{($ctrl.minimap)?$ctrl.TRANSLATE[1]:$ctrl.translate[1]}} ) {{ ($ctrl.minimap)? 'scale(0.3)':'' }}">
+        
+        	<!-- Swimlanes -->
+        	<bom-tree-swimlane ng-repeat="swimlane in $ctrl.swimlanes" swimlane="swimlane" level="$index" />
+        	
+        	<!-- Connectors -->
+            <path ng-repeat="path in $ctrl.edges" id="seg-{{path.source.id}}-{{path.target.id}}" class="link" ng-attr-d="{{$ctrl.computePath(path)}}" stroke-linejoin="round"></path>                            
+		
+			<!-- Nodes -->
+			<bom-tree-node expand-fn="$ctrl.expandAssembly(assembly)" ng-repeat="node in $ctrl.nodes" node="node" attributes="$ctrl.config.attributes" ng-mousedown="(!$ctrl.minimap)?$ctrl.selectAssembly(node):angular.noop()" ></bom-tree-node>
+			
+			<!-- Minimap indicator (if we're the minimap)  -->
+			<rect ng-if="$ctrl.minimap" 
+				  ng-attr-x="{{-($ctrl.translate[0]) + (120*$ctrl.scale) }}" 
+				  ng-attr-y="{{ -($ctrl.translate[1]) }}" 
+				  ng-attr-width="{{ ($ctrl.width / $ctrl.scale)+ (120*$ctrl.scale*0.3) }}" 
+				  ng-attr-height="{{ ($ctrl.height / $ctrl.scale)+ (20*$ctrl.scale*0.3) }}" 
+				  fill=blue fill-opacity=0.25 />
+		</g>  
+
+    </svg>
+</div>

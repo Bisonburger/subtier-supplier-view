@@ -1,0 +1,35 @@
+<div>
+	<uib-accordion close-others="false">
+				
+		<!--  Part Number filter -->
+		<div uib-accordion-group class="panel-default" is-open="true">
+			<uib-accordion-heading> 
+				<i class="fa fa-caret-down"></i> 
+				Part Number <span class="pull-right"><i class="fa" ng-class="{'fa-check':$ctrl.currentFilter.partNumber}"></i></span> 
+			</uib-accordion-heading>
+			<input type="text" ng-model="$ctrl.currentFilter.partNumber" class="form-control"
+				   placeholder="Enter Part #"
+				   uib-typeahead="partnumber for partnumber in $ctrl.partnumbers | filter:$viewValue | limitTo:10" />	
+		</div>
+		
+		<!-- Attributes filter -->
+		<div uib-accordion-group class="panel-default" is-open="false">
+			<uib-accordion-heading>
+				<i class="fa fa-caret-down"></i> Attribute Values <span class="pull-right badge">{{ $ctrl.currentFilter.selected.length }}</span>
+			</uib-accordion-heading>
+			
+			<div ng-repeat="attribute in $ctrl.attributes | orderBy">
+				<div class="form-group">
+					<label class="col-sm-4 control-label" for="{{attribute}}">{{$ctrl.mapName( attribute ) | camelCaseToHuman }}</label> 
+					<div class="col-sm-8">
+						<select id="{{attribute}}" class="form-control" ng-model="$ctrl.currentFilter.selected[attribute]">
+							<option value="">No Filter</option>
+							<option ng-repeat="option in $ctrl.attrValues[ attribute ] | orderBy" value="{{option}}">{{option}}</option>
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+	</uib-accordion>
+</div>

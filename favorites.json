@@ -1,0 +1,27 @@
+[{
+    "id": "14",
+    "inactiveDate": null,
+    "lastUpdatedDate": 1479753089466,
+    "lastUpdatedBy": "NRP0238974",
+    "createdBy": null,
+    "createdDate": 1479753089466,
+    "partNumber": "2247953-3",
+    "partSite": "1000",
+    "assemblyNumber": "2278779-204",
+    "assemblySite": "1130",
+    "userId": "NRP0238974",
+    "description": "NOSECONE ASSEMBLY, RIVETED (LIVE)"
+}, {
+    "id": "2",
+    "inactiveDate": null,
+    "lastUpdatedDate": 1479753089466,
+    "lastUpdatedBy": "NRP0238974",
+    "createdBy": null,
+    "createdDate": 1479753089466,
+    "partNumber": "2278778-204",
+    "partSite": "1130",
+    "assemblyNumber": "7650709-204",
+    "assemblySite": "1130",
+    "userId": "NRP0238974",
+    "description": "SM3"
+}]

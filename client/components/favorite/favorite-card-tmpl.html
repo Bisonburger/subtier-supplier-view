@@ -1,0 +1,18 @@
+<div class="panel panel-default">
+	<div class="panel-heading" >
+		<h1 class="panel-title"><strong uib-tooltip="{{favorite.description}}">{{favorite.description | charLimit:22 }}</strong>
+			<span class="pull-right">
+				<i style="cursor:pointer;" ui-sref="app.visualization({partNumber : favorite.partNumber, partSite : favorite.partSite, assemblyNumber : favorite.assemblyNumber, assemblySite : favorite.assemblySite})" uib-tooltip="View BOM" tooltip-placement="left" class="fa fa-sitemap text-default"></i>
+				<i style="cursor:pointer;" ui-sref="app.favorite-details({id : favorite.id})" uib-tooltip="Edit Favorite" tooltip-placement="left" class="fa fa-pencil text-warning"></i>
+				<i style="cursor:pointer;" uib-tooltip="Delete Favorite" tooltip-placement="left" class="fa fa-trash text-danger" ng-click="$ctrl.deleteFavorite(favorite)"></i>
+			</span>
+		</h1>
+	</div>
+	
+	<div class="panel-body">
+		<div class="row"><label class="col-sm-6">Part Number:</label><span class="col-sm-6"><strong>{{favorite.partNumber}}</strong></span></div>
+		<div class="row"><label class="col-sm-6">Part Site:</label><span class="col-sm-6">{{favorite.partSite}}</span></div>
+		<div class="row"><label class="col-sm-6">Assembly Number:</label><span class="col-sm-6">{{favorite.assemblyNumber}}</span></div>
+		<div class="row"><label class="col-sm-6">Assembly Site:</label><span class="col-sm-6">{{favorite.assemblySite}}</span></div>
+	</div>	
+</div>

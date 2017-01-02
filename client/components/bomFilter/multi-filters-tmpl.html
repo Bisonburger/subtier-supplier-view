@@ -1,0 +1,24 @@
+<div>
+	<label class="control-label">Filters</label>
+	<div>
+		<div class="col-sm-8 list-group well">
+			<a ng-click="$ctrl.currentFilter= filter" 
+			   class="list-group-item" ng-class="{'active': $ctrl.currentFilter === filter}" ng-repeat="filter in $ctrl.filters">
+				{{(filter.name && filter.name.length>0)?filter.name:'Filter Name'}} 
+				<span ng-if="filter.active" class="pull-right fa fa-check-circle" ng-class="{'fa-inverse': filter === $ctrl.currentFilter, 'text-success': filter !== $ctrl.currentFilter}" uib-tooltip="Filter is active"></span>
+			</a>
+		</div>
+		<div class="col-sm-4">
+			<div class="btn-group" role="group">			
+				<button ng-click="$ctrl.newFilter()" class="btn btn-default btn-block" type="button">
+					<span class="fa fa-plus"></span> New Filter</button>
+				<button ng-click="$ctrl.removeFilter()" class="btn btn-default btn-block" type="button" ng-class="{'disabled': !$ctrl.filters || $ctrl.filters.length === 0}">
+					<span class="fa fa-trash"></span> Delete Filter</button>
+				<button ng-click="$ctrl.changeFilterActive()" class="btn btn-default btn-block"  
+				        ng-class="{'disabled': !$ctrl.filters || $ctrl.filters.length === 0}" type="button">
+					{{$ctrl.currentFilter.active? 'Deactivate' : 'Activate' }} Filter
+				</button>
+			</div>
+		</div>
+	</div>
+</div>

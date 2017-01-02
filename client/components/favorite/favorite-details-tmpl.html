@@ -1,0 +1,107 @@
+<div id="favorite-details-container" class="container">
+	<div id='rtn-loading-screen' ng-hide="$ctrl.loaded" ng-include="'layout/loading/loading.html'"></div>
+	<div ng-if="$ctrl.loaded" ng-cloak>
+		<div class="row">
+			<h1 class="page-header">
+				Favorite<a class="btn btn-default pull-right" ui-sref="app.favorite-list"><i class="fa fa-chevron-left"></i>&nbsp;&nbsp;Back to Favorites</a>
+			</h1>
+			<form id="$ctrl.form" name="$ctrl.form" class="form-horizontal" shown="true" editable-form novalidate>
+				<div class="row">
+					<div class="form-group col-sm-10" ng-hide="$ctrl.isAdd">
+						<label for="" class="col-sm-4 control-label">Last Updated</label>
+						<div class="col-sm-6">
+							<p class="form-control-static"><span e-name="lastUpdatedDate">{{ $ctrl.favorite.lastUpdatedDate | date: 'medium' }}</span></p>
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-class="{'has-error': !$ctrl.form.description.$pristine && $ctrl.form.description.$invalid, 'has-feedback': !$ctrl.form.description.$pristine && $ctrl.form.description.$invalid }">
+					<div class="form-group col-sm-10">
+						<label for="" class="col-sm-4 control-label rtn-required">Description</label>
+						<div class="col-sm-6">
+							<input maxlength="250" name="description" type="text" class="form-control rtn-required" ng-model="$ctrl.favorite.description" required placeholder="Description...">
+							<span ng-show="!$ctrl.form.description.$pristine && $ctrl.form.description.$invalid" class="fa fa-remove form-control-feedback centered-remove" aria-hidden="true"></span>	
+					  		<p class="text-danger" ng-show="!$ctrl.form.description.$pristine && $ctrl.form.description.$error.required">Description is required</p>
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-class="{'has-error': !$ctrl.form.partNumber.$pristine && $ctrl.form.partNumber.$invalid, 'has-feedback': !$ctrl.form.$pristine && $ctrl.form.partNumber.$invalid }">
+					<div class="form-group col-sm-10">
+						<label for="" class="col-sm-4 control-label rtn-required">Part Number</label>
+						<div class="col-sm-6">
+							<input maxlength="250" name="partNumber" type="text" class="form-control" ng-model="$ctrl.favorite.partNumber" required placeholder="Part Number...">
+							<span ng-show="!$ctrl.form.partNumber.$pristine && $ctrl.form.partNumber.$invalid" class="fa fa-remove form-control-feedback centered-remove" aria-hidden="true"></span>	
+					  		<p class="text-danger" ng-show="!$ctrl.form.partNumber.$pristine && $ctrl.form.partNumber.$error.required">Part Number is required</p>
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-class="{'has-error': !$ctrl.form.partSite.$pristine && $ctrl.form.partSite.$invalid, 'has-feedback': !$ctrl.form.partSite.$pristine && $ctrl.form.partSite.$invalid }">
+					<div class="form-group col-sm-10">
+						<label for="" class="col-sm-4 control-label rtn-required">Part Site</label>
+						<div class="col-sm-6">
+							<input maxlength="250" name="partSite" type="text" class="form-control" ng-model="$ctrl.favorite.partSite" required placeholder="Part Site...">
+							<span ng-show="!$ctrl.form.partSite.$pristine && $ctrl.form.partSite.$invalid" class="fa fa-remove form-control-feedback centered-remove" aria-hidden="true"></span>	
+					  		<p class="text-danger" ng-show="!$ctrl.form.partSite.$pristine && $ctrl.form.partSite.$error.required">Part Site is required</p>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col-sm-10" ng-show="$ctrl.favorite.assemblyNumber">
+						<label for="" class="col-sm-4 control-label">Assembly Number</label>
+						<div class="col-sm-6">
+							<p class="form-control-static"><span e-name="assemblyNumber">{{ $ctrl.favorite.assemblyNumber }}</span></p>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col-sm-10" ng-show="$ctrl.favorite.assemblySite">
+						<label for="" class="col-sm-4 control-label">Assembly Site</label>
+						<div class="col-sm-6">
+							<p class="form-control-static"><span e-name="assemblySite">{{ $ctrl.favorite.assemblySite }}</span></p>
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-show="$ctrl.matchingAssemblies.length > 0">
+					<div class="form-group col-sm-10">
+						<div class="col-sm-10 col-sm-push-1">
+							<div class="alert alert-warning">
+								There were multiple assemblies that have the same part number and site. Please select the next higher assembly part number and site this part belongs to from the list below and click Save.
+							</div>
+							<table class="table table-condensed">
+								<tr class="rtn-table-header">
+									<th class="col-sm-3">Assembly Number</th>
+									<th class="col-sm-2">Assembly Site</th>
+									<th class="col-sm-5">Assembly Description</th>
+									<th class="col-sm-1"></th>
+								</tr>
+								<tr ng-repeat="assembly in $ctrl.matchingAssemblies">
+									<td class="col-sm-3">{{assembly.assemblyNumber}}</td>
+									<td class="col-sm-2">{{assembly.assemblySite}}</td>
+									<td class="col-sm-5">{{assembly.assemblyDescription}}</td>
+									<td class="col-sm-1"><input type="radio" name="selectedAssembly" ng-value="assembly" ng-model="$ctrl.selectedAssembly"></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-show="$ctrl.showNoMatchingAssembliesError">
+					<div class="form-group col-sm-10">
+						<div class="col-sm-6 col-sm-push-4">
+							<div class="alert alert-danger">
+								No assemblies match the part number and part site provided or you do not have access to view the part requested.
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col-sm-10">
+						<div class="col-sm-6 col-sm-push-4">
+							<button id="saveBtn" class="btn btn-primary" ng-disabled="$ctrl.form.$invalid" ng-click="$ctrl.save()"><span class="fa fa-save"></span> Save</button>
+							<button id="cancelBtn" class="btn btn-default" ng-click="$ctrl.cancelSave()"> Cancel</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<!--  end container  -->
