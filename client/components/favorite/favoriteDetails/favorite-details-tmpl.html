@@ -1,0 +1,124 @@
+<div id="favorite-details-container" class="container">
+	<div id='rtn-loading-screen' ng-hide="$ctrl.loaded" ng-include="'layout/loading/loading.html'"></div>
+	<div ng-if="$ctrl.loaded" ng-cloak>
+		<div class="row">
+			<h1 class="page-header">
+				<span ng-show="$ctrl.isAdd">Add </span><span ng-hide="$ctrl.isAdd">Edit </span>Favorite<a class="btn btn-default pull-right" ui-sref="app.favorite-list"><i class="fa fa-chevron-left"></i>&nbsp;&nbsp;Back to Favorites</a>
+			</h1>
+			<form id="$ctrl.form" name="$ctrl.form" class="form-horizontal" shown="true" editable-form novalidate>
+				<div class="row">
+					<div class="form-group col-sm-10" ng-hide="$ctrl.isAdd">
+						<label for="" class="col-sm-4 control-label">Last Updated</label>
+						<div class="col-sm-6">
+							<p class="form-control-static"><span e-name="lastUpdatedDate">{{ $ctrl.favorite.lastUpdatedDate | date: 'medium' }}</span></p>
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-class="{'has-error': !$ctrl.form.description.$pristine && $ctrl.form.description.$invalid, 'has-feedback': !$ctrl.form.description.$pristine && $ctrl.form.description.$invalid }">
+					<div class="form-group col-sm-10">
+						<label for="" class="col-sm-4 control-label rtn-required">Favorite Name</label>
+						<div class="col-sm-6">
+							<input maxlength="250" name="description" type="text" class="form-control rtn-required" ng-model="$ctrl.favorite.description" required placeholder="Favorite Name...">
+							<span ng-show="!$ctrl.form.description.$pristine && $ctrl.form.description.$invalid" class="fa fa-remove form-control-feedback centered-remove" aria-hidden="true"></span>	
+					  		<p class="text-danger" ng-show="!$ctrl.form.description.$pristine && $ctrl.form.description.$error.required">Favorite Name is required</p>
+						</div>
+					</div>
+				</div>
+				<hr>
+				<div class="row">
+					<div class="form-group col-sm-10">
+						<div class="col-sm-6 col-sm-push-4">
+							<h4>Search Parts</h4>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col-sm-10">
+						<label for="" class="col-sm-4 control-label">Supplier</label>
+						<div class="col-sm-6">
+							<input maxlength="250" name="supplier" type="text" class="form-control rtn-required" ng-model="$ctrl.selectedSupplier" typeahead-min-length="3" uib-typeahead="supplier as supplier.name for supplier in $ctrl.searchSuppliers($viewValue)" ng-model-options="{debounce: 500, blur: 250}" placeholder="Supplier..." typeahead-no-results="noSupplierResults">
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-if="noSupplierResults">
+					<div class="form-group col-sm-10">
+						<div class="col-sm-6 col-sm-push-4">
+							No supplier found!
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="form-group col-sm-10">
+						<label for="" class="col-sm-4 control-label">Part</label>
+						<div class="col-sm-6">
+							<input maxlength="250" name="partNumber" type="text" ng-disabled="!$ctrl.selectedSupplier.site" class="form-control  rtn-required" ng-model="selectedPart" typeahead-min-length="3" uib-typeahead="assembly as 'Part Number: ' + assembly.partNumber + ' Description: ' + assembly.partDescription + ' CAGE Code: ' + assembly.partSite + ' Next Higher Assembly: ' + assembly.assemblyNumber for assembly in $ctrl.searchAssemblies($viewValue)" ng-model-options="{debounce: 500, blur: 250}" placeholder="Part number, part desciption..." typeahead-on-select="onSelect($item, $model, $label)"  typeahead-no-results="noAssemblyResults">
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-if="noAssemblyResults">
+					<div class="form-group col-sm-10">
+						<div class="col-sm-6 col-sm-push-4">
+							No assemblies found!
+						</div>
+					</div>
+				</div>
+				<hr>
+				<div class="row" ng-if="$ctrl.partSelected">
+					<div class="form-group col-sm-10">
+						<div class="col-sm-6 col-sm-push-4">
+							<h4>Selected Part</h4>
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-if="!$ctrl.partSelected">
+					<div class="form-group col-sm-10">
+						<div class="col-sm-6 col-sm-push-4">
+							<h4>No part selected</h4>
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-show="$ctrl.partSelected">
+					<div class="form-group col-sm-10">
+						<label for="" class="col-sm-4 control-label">Part Number</label>
+						<div class="col-sm-6">
+							<p class="form-control-static"><span e-name="partNumber">{{ $ctrl.favorite.partNumber }}</span></p>
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-show="$ctrl.partSelected">
+					<div class="form-group col-sm-10">
+						<label for="" class="col-sm-4 control-label">CAGE Code</label>
+						<div class="col-sm-6">
+							<p class="form-control-static"><span e-name="partSite">{{ $ctrl.favorite.partSite }}</span></p>
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-show="$ctrl.partSelected">
+					<div class="form-group col-sm-10">
+						<label for="" class="col-sm-4 control-label">Assembly Part Number</label>
+						<div class="col-sm-6">
+							<p class="form-control-static"><span e-name="assemblyNumber">{{ $ctrl.favorite.assemblyNumber }}</span></p>
+						</div>
+					</div>
+				</div>
+				<div class="row" ng-show="$ctrl.partSelected">
+					<div class="form-group col-sm-10">
+						<label for="" class="col-sm-4 control-label">Assembly CAGE Code</label>
+						<div class="col-sm-6">
+							<p class="form-control-static"><span e-name="assemblySite">{{ $ctrl.favorite.assemblySite }}</span></p>
+						</div>
+					</div>
+				</div>
+				<hr ng-show="$ctrl.partSelected">
+			</form>
+							<div class="row">
+					<div class="form-group col-sm-10">
+						<div class="col-sm-6 col-sm-push-4">
+							<button id="saveBtn" class="btn btn-primary" ng-disabled="(!$ctrl.partSelected && $ctrl.form.description.$pristine) || $ctrl.form.$invalid || !$ctrl.partSelected" ng-click="$ctrl.save()"><span class="fa fa-save"></span> Save</button>
+							<button id="cancelBtn" class="btn btn-default" ng-click="$ctrl.cancelSave()"> Cancel</button>
+						</div>
+					</div>
+				</div>
+		</div>
+	</div>
+</div>

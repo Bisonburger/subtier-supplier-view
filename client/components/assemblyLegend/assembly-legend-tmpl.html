@@ -1,0 +1,36 @@
+<div class="col-lg-8 col-md-7 rtn-legend-container">
+	<div class="col-lg-3 col-sm-3 col-md-4 rtn-legend-inner-left"><strong>View Type:</strong> {{ ($ctrl.isMaterialView) ? 'Material' : 'Supplier' }}</div>
+	<div ng-if="$ctrl.isScheduleView" class="col-lg-3 col-sm-3 col-md-4 rtn-legend-inner-left"><strong>Data Type:</strong> <i class="fa fa-calendar"></i> Schedule</div>
+	<div ng-if="$ctrl.isSpcView" class="col-lg-3 col-sm-3 col-md-4 rtn-legend-inner-left"><strong>Data Type:</strong> <i class="fa fa-line-chart"></i> SPC</div>
+	<div ng-if="$ctrl.isQnoteView" class="col-lg-3 col-sm-3 col-md-4 rtn-legend-inner-left"><strong>Data Type:</strong> <i class="fa fa-edit"></i> QNote</div>
+	<div class="col-lg-2 col-sm-2 col-md-2 rtn-legend-inner-right"><strong>Status:&nbsp;&nbsp;</strong></div>
+	<div class="col-lg-4 col-sm-2 col-md-4 rtn-legend-inner-right">
+		<div class="rtn-legend-inner-green" ng-if="$ctrl.isScheduleView" uib-tooltip="PO items due more than two weeks from today" tooltip-placement="top">
+			<div>&nbsp;</div>
+		</div>
+		<div class="rtn-legend-inner-yellow" ng-if="$ctrl.isScheduleView" uib-tooltip="PO items due within two weeks" tooltip-placement="top">
+			<div>&nbsp;</div>
+		</div>
+		<div class="rtn-legend-inner-red" ng-if="$ctrl.isScheduleView" uib-tooltip="PO items past due" tooltip-placement="top">
+			<div>&nbsp;</div>
+		</div>
+		
+		<div class="rtn-legend-inner-green" ng-if="$ctrl.isSpcView" uib-tooltip="Part contains zero spec limit violations" tooltip-placement="top">
+			<div>&nbsp;</div>
+		</div>
+		<div class="rtn-legend-inner-red" ng-if="$ctrl.isSpcView" uib-tooltip="Part contains one or more spec limit violations" tooltip-placement="top">
+			<div>&nbsp;</div>
+		</div>
+		
+		<div class="rtn-legend-inner-green" ng-if="$ctrl.isQnoteView" uib-tooltip="QNotes have been flowed through" tooltip-placement="top">
+			<div>&nbsp;</div>
+		</div>
+		<div class="rtn-legend-inner-yellow" ng-if="$ctrl.isQnoteView" uib-tooltip="QNotes show violations" tooltip-placement="top">
+			<div>&nbsp;</div>
+		</div>
+		
+		<div class="rtn-legend-inner-no-data" uib-tooltip="No Data" tooltip-placement="top">
+			<div>&nbsp;</div>
+		</div>
+	</div>
+</div>

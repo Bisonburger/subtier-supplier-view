@@ -1,4 +1,10 @@
+<div ng-hide="$ctrl.hideFilterInfo" uib-alert class="alert-info" close="$ctrl.hideFilterInfo=true">
+By default, new filters are not active; Toggle the Activate/Deactivate button on the current filter to apply/remove.  Active filters are shown in the list with a 
+<span class="fa fa-check-circle"></span>
+</div>
+
 <form class="form-horizontal" name="$ctrl.filterForm" ng-submit="$ctrl.applyFilterChange()" novalidate >
+
 	
 	<!-- List of filters -->
 	<div class="row col-sm-12" ng-include="'pages/ssv/components/bomFilter/multi-filters-tmpl.html'"></div>

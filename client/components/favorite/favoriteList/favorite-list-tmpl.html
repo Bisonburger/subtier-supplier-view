@@ -1,0 +1,23 @@
+<div class="container-fluid">
+	<div id='rtn-loading-screen' ng-hide="$ctrl.loaded" ng-include="'layout/loading/loading.html'"></div>
+	<div ng-if="$ctrl.loaded" ng-cloak>
+		<div class="row">
+			<h1 class="page-header">
+				<span class="fa fa-list-alt"></span> My Favorites
+				<button type="button" class="btn btn-sm btn-primary pull-right" ui-sref="app.favorite-details"><span class="fa fa-plus"></span> Add Favorite </button>
+			</h1>
+		</div>
+		<div class="row">
+			<ng-include class="col-md-3" ng-repeat="favorite in $ctrl.favorites" src="'pages/ssv/components/favorite/favoriteList/favorite-card-tmpl.html'"></ng-include>
+		</div>
+		<div class="row" ng-show="$ctrl.favorites.length == 0" ng-cloak>
+			<div class="col-sm-8 col-sm-push-2">
+				<h2>Welcome to Sub-Tier Supplier Visibility (SSV)</h2>
+				
+				<p>Sub-Tier Supplier Visibility (SSV) is a RMS IT developed solution that provides users with a read-only hierarchical tree view of the bill of materials with schedule, quality, and QNote information for critical sub-tier suppliers.</p>
+				
+				<p>The favorites is a list of short cuts to parts that you wish to view in the visualization tool. Each part will represent a starting point in the BOM structure and will allow you to see it and all its children's information. Begin by clicking the Add Favorite button in the upper right hand corner. You will then be able to search for parts by identifying the supplier and then searching on either part number or part description to identify parts.</p>
+			</div>
+		</div>
+	</div>
+</div>

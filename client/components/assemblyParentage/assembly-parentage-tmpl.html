@@ -1,3 +1,5 @@
 <ol class="breadcrumb">
-    <li ng-class="{'active':$last}" ng-repeat="assembly in $ctrl.parenttree"><a ng-click="$ctrl.zoomToAssembly(assembly)">{{assembly.partDescription}}</a></li>
+    <li ng-class="{'active':$last}" ng-repeat="assembly in $ctrl.parenttree">
+    	<a ng-click="$ctrl.zoomToAssembly(assembly)">{{ (($ctrl.isMaterialView)?assembly.partDescription:assembly.partSupplier) || '(NO DATA)' }}</a>
+    </li>
 </ol>

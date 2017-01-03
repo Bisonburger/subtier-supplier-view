@@ -1,5 +1,8 @@
 <div id="canvas" ng-class="{'minimap-container': $ctrl.minimap, 'svg-container': !$ctrl.minimap }">
-    <svg style="max-width: 100%;" id="svgContent" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet" ng-class="{'svg-content-responsive': !$ctrl.minimap}">
+    <svg style="max-width: 100%;" id="svgContent" vbox="0 0 1000 500" preserveAspectRatio="xMidYMid meet" ng-class="{'svg-content-responsive': !$ctrl.minimap}">
+    	
+    	<!-- style ng-include="'css/app.css'" / -->
+    
         <defs>
         	<!-- Header gradient -->
         	<linearGradient id=g1 x1=0% y1=0% x2=0% y2=100%>
@@ -8,38 +11,47 @@
         	</linearGradient>
 
 			<!-- Swimlane gradient -->
-        	<linearGradient id=g2 x1=0% y1=0% x2=100% y2=0%>
+        	<linearGradient id=g2 x1=0% y1=0% x2=100% y2=0% spreadMethod="pad">
             	<stop stop-color=#ddddbb offset=25% />
             	<stop stop-color=darkkhaki offset=100% />
         	</linearGradient>
-        	
+        	        	        	
         	<filter id="dropShadowFilter" width="200%" height="200%">
 		      	<feOffset result="offOut" in="SourceGraphic" dx="10" dy="10" />
       			<feColorMatrix result="matrixOut" in="offOut" type="matrix" values="0.2 0 0 0 0 0 0.2 0 0 0 0 0 0.2 0 0 0 0 0 1 0" />
       			<feGaussianBlur result="blurOut" in="matrixOut" stdDeviation="10" />
       			<feBlend in="SourceGraphic" in2="blurOut" mode="normal" />
     		</filter>
+    		
+    		<linearGradient id="gradient" x1="0%" y1="0%" x2="0%" y2="100%" spreadMethod="pad" gradientTransform="rotate(45)">
+      			<stop offset="0%" stop-color="#4094E6" stop-opacity="0.1"/>
+      			<stop offset="100%" stop-color="#434342" stop-opacity="1"/>
+    		</linearGradient>
+    		
+    		<pattern ng-repeat="num in [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]" id=watermark-{{num}} x="0" y="0" width="90" height="22" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)" preserveAspectRatio="xMinYMin slice">
+      			<text x="0" y="20" style="font-family:Verdana; font-size:20px; font-weight:bold; stroke:none; fill:#434342; fill-opacity:0.3">Level {{num}}</text>
+    		</pattern>
+    		
 
     	</defs>
     	
-        <g id="svgGroup" ng-attr-transform="translate( {{($ctrl.minimap)?$ctrl.TRANSLATE[0]:$ctrl.translate[0]}} , {{($ctrl.minimap)?$ctrl.TRANSLATE[1]:$ctrl.translate[1]}} ) {{ ($ctrl.minimap)? 'scale(0.3)':'' }}">
+        <g id="svgGroup" ng-attr-transform="translate( 500 , 100 ) {{ ($ctrl.minimap)? 'scale(0.3)':'' }}">
         
         	<!-- Swimlanes -->
-        	<bom-tree-swimlane ng-repeat="swimlane in $ctrl.swimlanes" swimlane="swimlane" level="$index" />
+        	<bom-tree-swimlane is-material-view="$ctrl.config.isMaterialView" ng-repeat="swimlane in $ctrl.swimlanes" swimlane="swimlane" level="$index" />
         	
         	<!-- Connectors -->
             <path ng-repeat="path in $ctrl.edges" id="seg-{{path.source.id}}-{{path.target.id}}" class="link" ng-attr-d="{{$ctrl.computePath(path)}}" stroke-linejoin="round"></path>                            
 		
 			<!-- Nodes -->
-			<bom-tree-node expand-fn="$ctrl.expandAssembly(assembly)" ng-repeat="node in $ctrl.nodes" node="node" attributes="$ctrl.config.attributes" ng-mousedown="(!$ctrl.minimap)?$ctrl.selectAssembly(node):angular.noop()" ></bom-tree-node>
+			<bom-tree-node is-material-view="$ctrl.config.isMaterialView" expand-fn="$ctrl.expandAssembly(assembly)" ng-repeat="node in $ctrl.nodes" node="node" attributes="$ctrl.config.attributes" ng-mousedown="(!$ctrl.minimap)?$ctrl.selectAssembly(node):angular.noop()" ></bom-tree-node>
 			
 			<!-- Minimap indicator (if we're the minimap)  -->
 			<rect ng-if="$ctrl.minimap" 
-				  ng-attr-x="{{-($ctrl.translate[0]) + (120*$ctrl.scale) }}" 
-				  ng-attr-y="{{ -($ctrl.translate[1]) }}" 
-				  ng-attr-width="{{ ($ctrl.width / $ctrl.scale)+ (120*$ctrl.scale*0.3) }}" 
-				  ng-attr-height="{{ ($ctrl.height / $ctrl.scale)+ (20*$ctrl.scale*0.3) }}" 
-				  fill=blue fill-opacity=0.25 />
+				  ng-attr-x="{{ ($ctrl.translate[0] / -($ctrl.scale))+(60/$ctrl.scale) }}" 
+				  ng-attr-y="{{ $ctrl.translate[1] / -($ctrl.scale) }}"
+				  ng-attr-width="{{ ($ctrl.width/$ctrl.scale) + (120/$ctrl.scale) }}"  ng-attr-height="{{ ($ctrl.height/$ctrl.scale)  + (60/$ctrl.scale) }}" 
+				  fill=blue fill-opacity=0.25 />				  
 		</g>  
 
     </svg>

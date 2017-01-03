@@ -18,27 +18,76 @@
 
 define( [], function(){ return AssemblyParentageComponent; });
 
+/**
+ * Definition of the AssemblyParentage component
+ * 
+ * @name assemblyParentage
+ * @module ssv.components
+ * 
+ */
 var AssemblyParentageComponent = {
 	    controller: ['$scope', '$rootScope', AssemblyParentageCtrl],
 	    templateUrl: 'pages/ssv/components/assemblyParentage/assembly-parentage-tmpl.html'
 	};
 
+/**
+ * Controller for the AssemblyParentage component
+ * 
+ * @name AssemblyParentageController
+ * @param {service} $scope AngularJS current scope service
+ * @param {service} $rootScope AngularJS rootScope service
+ */
 function AssemblyParentageCtrl($scope,$rootScope){
-    var ctrl = this;
+
+	/** @alias this */
+	var ctrl = this;
     
+	/** Controller initializer @function @see onInit @public */
     ctrl.$onInit = onInit;
+    
+    /** Action for zooming to an assembly @function @see onInit @public */
     ctrl.zoomToAssembly = zoomToAssembly;
 
+    /**
+     * Initialize the controller
+     * 
+     * @private
+     */
     function onInit(){
+    	ctrl.isMaterialView = true;
         ctrl.parenttree = [];
-        $scope.$on( 'bomTreeNodeSelected', updatePath );
-    };
+        
+        $scope.$on( 'bomTreeNodeSelected', _updatePath );
+        $scope.$on('bomTreeConfigChanged', _handleConfigChanged );
+
+    }
     
-    function updatePath(event,opts){
+    /**
+     * Handler for the bomTreeNodeSelected event
+     * Extracts the path to root (in reverse order) for display in the breadcrumbs
+     * 
+     * @param {Event} event the event that triggered the action
+     * @param {{pathToRoot:Assembly[]}} opts data passed with the event
+     */
+    function _updatePath(event,opts){
     	ctrl.parenttree = (opts && opts.pathToRoot)? opts.pathToRoot.reverse() : [];    	
-    };
+    }
     
+    /**
+     * Handler for the bomTreeConfigChanged event
+     * Sets the flag for Material view based on the event indicators
+     * 
+     * @param {Event} event the event that triggered the action
+     * @param {{isMaterialView:boolean}} opts data passed with the event
+     */
+    function _handleConfigChanged(event,opts){
+    	ctrl.isMaterialView = (opts && opts.isMaterialView); 
+    }
+    
+    /**
+     * Action for zooming to an assembly; fires the bomTreeZoom event passing the assembly to zoom to
+     */
     function zoomToAssembly(assembly){
     	$rootScope.$broadcast( 'bomTreeZoom', {assembly: assembly} );
     }
-};
+}

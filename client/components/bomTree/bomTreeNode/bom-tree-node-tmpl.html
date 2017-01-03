@@ -1,0 +1,35 @@
+<g class="node btn" ng-attr-transform="translate({{$ctrl.node.x}},{{$ctrl.node.y}}) {{($ctrl.scale)?'scale(3)':''}}" >
+  
+	<!-- Node outline -->
+	<rect x=-100 y=-20 width=200
+		ng-attr-height="{{3.0 + ($ctrl.attributes.length*.65)}}em"
+		ng-style="{'stroke':($ctrl.node.highlighted)? $ctrl.node.highlightColor:'black'}" 
+		ng-class="{'highlight-node':$ctrl.node.highlighted,'green-node':$ctrl.node.color==='green','yellow-node':$ctrl.node.color==='yellow','red-node':$ctrl.node.color==='red','no-data-node':$ctrl.node.color==='no-data'}" 
+		filter="url(#dropShadowFilter)" /> 
+	
+	<!-- Header -->
+	<rect x=-100 y=-20 width=200 height=2em fill=url(#g1) />
+	<line class="header-bottom" x1=-100 y1=0.6em x2=100 y2=0.6em />
+	
+	<!-- Node text/header -->
+	<text ng-click="$ctrl.expandFn({assembly:$ctrl.node})"> 
+		<tspan class="svg-fa" x=95 y=-1.5em>{{($ctrl.node.children? "&#xf147" : ($ctrl.node._children? "&#xf196" : ""))}}</tspan> 
+	</text>
+	
+	<text> 
+		<tspan class="label" x=-95 y=-1em>{{$ctrl.node.partSupplier | charLimit }}</tspan> 
+		<tspan class="label" x=-95 y=0.5em>{{ (($ctrl.isMaterialView)? $ctrl.node.partDescription : "") | charLimit }}</tspan> 
+	</text>
+	
+	<!-- Node text/attributes -->
+	<g ng-repeat="nodeAttr in $ctrl.attributes | orderBy:$ctrl.mappedFn"> 
+		<text> 
+			<tspan class="inner-label" text-anchor="start" x=-95 ng-attr-y="{{$index+2}}em">{{ nodeAttr | mapped | camelCaseToHuman }}:</tspan> 
+			<tspan> {{ ($ctrl.node[nodeAttr])?$ctrl.node[nodeAttr]:'NO DATA' | uppercase | charLimit:33-nodeAttr.length}}</tspan> 
+		</text> 
+	</g>
+	
+	<!-- Grey-out -->                                	                	
+    <rect ng-if="$ctrl.node.greyed" x=-100 y=-20 width=200 ng-attr-height="{{$ctrl.attributes.length+1.75}}em" class="greyed-node" />
+	
+</g>

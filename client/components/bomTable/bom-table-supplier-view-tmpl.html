@@ -1,0 +1,56 @@
+<h3><i class="fa fa-sitemap"></i> BOM - {{ $ctrl.assembly.partDescription }}</h3>
+<table class="table table-condensed">
+	<tr>
+		<td><input class="form-control rtn-no-clear" type="text" name="search" placeholder="Filter.." ng-model="$ctrl.search.bomLevel" ng-model-options="{debounce: 500}"/></td>
+		<td><input class="form-control rtn-no-clear" type="text" name="search" placeholder="Filter.." ng-model="$ctrl.search.partSupplier" ng-model-options="{debounce: 500}"/></td>
+		<td><button type="button" class="btn btn-primary" ng-click="$ctrl.clearSearch()">Clear Table Filters</button></td>
+	</tr>
+	<tr ng-if="$ctrl.isScheduleView" class="rtn-table-header">
+		<th>Tier Level</th>
+		<th>Supplier</th>
+		<th></th>
+	</tr>
+	<tr ng-if="$ctrl.isScheduleView" ng-class="{'danger':assembly.getWorstCaseColor('schedule') === 'red', 'warning': assembly.getWorstCaseColor('schedule') === 'yellow', 'success': assembly.getWorstCaseColor('schedule') === 'green' }" ng-repeat="assembly in $ctrl.assemblies | filter: $ctrl.search">
+		<td>{{assembly.bomLevel}}</td>
+		<td>{{assembly.partSupplier}}</td>
+		<td>
+			<div class="btn-group" role="group">
+				<button ng-if="$ctrl.madeRoot" type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.resetView()"><i class="fa fa-refresh"></i> Reset View</button>
+				<button ng-if="!$ctrl.madeRoot" type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.changeTreeRoot(assembly)"><i class="fa fa-sitemap"></i> Make Root</button>
+				<button type="button" class="btn btn-default btn-sm" ng-click="$ctrl.zoomToAssembly(assembly)"><i class="fa fa-search"></i> Find Me</button>
+			</div>
+		</td>
+	</tr>
+	<tr ng-if="$ctrl.isSpcView" class="rtn-table-header">
+		<th>Tier Level</th>
+		<th>Supplier</th>
+		<th></th>
+	</tr>
+	<tr ng-if="$ctrl.isSpcView" ng-class="{'danger':assembly.getWorstCaseColor('spc') === 'red', 'warning': assembly.getWorstCaseColor('spc') === 'yellow', 'success': assembly.getWorstCaseColor('spc') === 'green' }" ng-repeat="assembly in $ctrl.assemblies | filter: $ctrl.search">
+		<td>{{assembly.bomLevel}}</td>
+		<td>{{assembly.partSupplier}}</td>
+		<td>
+			<div class="btn-group" role="group">
+				<button ng-if="$ctrl.madeRoot" type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.resetView()"><i class="fa fa-refresh"></i> Reset View</button>
+				<button ng-if="!$ctrl.madeRoot" type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.changeTreeRoot(assembly)"><i class="fa fa-sitemap"></i> Make Root</button>
+				<button type="button" class="btn btn-default btn-sm" ng-click="$ctrl.zoomToAssembly(assembly)"><i class="fa fa-search"></i> Find Me</button>
+			</div>
+		</td>
+	</tr>
+	<tr ng-if="$ctrl.isQnoteView" class="rtn-table-header">
+		<th>Tier Level</th>
+		<th>Supplier</th>
+		<th></th>
+	</tr>
+	<tr ng-if="$ctrl.isQnoteView" ng-class="{'danger':assembly.getWorstCaseColor('qnote') === 'red', 'warning': assembly.getWorstCaseColor('qnote') === 'yellow', 'success': assembly.getWorstCaseColor('qnote') === 'green' }" ng-repeat="assembly in $ctrl.assemblies | filter: $ctrl.search">
+		<td>{{assembly.bomLevel}}</td>
+		<td>{{assembly.partSupplier}}</td>
+		<td>
+			<div class="btn-group" role="group">
+				<button ng-if="$ctrl.madeRoot" type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.resetView()"><i class="fa fa-refresh"></i> Reset View</button>
+				<button ng-if="!$ctrl.madeRoot" type="button" class="btn btn-primary btn-sm" ng-click="$ctrl.changeTreeRoot(assembly)"><i class="fa fa-sitemap"></i> Make Root</button>
+				<button type="button" class="btn btn-default btn-sm" ng-click="$ctrl.zoomToAssembly(assembly)"><i class="fa fa-search"></i> Find Me</button>
+			</div>
+		</td>
+	</tr>
+</table>

@@ -1,72 +1,68 @@
-		<div class="col-sm-12 side-nav__header">
-			<strong>Supplier Details</strong>
+<div class="col-sm-12 view-header">
+	<strong>Supplier Details</strong>
+</div>
+<div class="col-sm-12">
+	<label class="col-sm-4">Supplier</label>
+	<span class="col-sm-8">{{$ctrl.assembly.partSupplier}}</span>
+</div>
+<div class="col-sm-12 ">
+	<uib-accordion close-others="false">
+		<div uib-accordion-group class="panel-default" is-open="$ctrl.isScheduleView">
+			<uib-accordion-heading>
+				<i class="fa fa-caret-down"></i> Schedule Status<span class="pull-right"></span>
+			</uib-accordion-heading>
+			<div class="col-sm-12">
+				<span class="col-sm-3"><small>Part Number</small></span>
+				<span class="col-sm-5"><small>Part Description</small></span>
+				<span class="col-sm-2"><small>Days Late</small></span>
+				<span class="col-sm-2"><small>Qty. Late</small></span>
+			</div>
+			<div class="col-sm-12" ng-class="{'status-highlight-row-red' : $ctrl.assembly.scheduleStatus === 'R', 'status-highlight-row-yellow' : $ctrl.assembly.scheduleStatus === 'Y', 'status-highlight-row-green' : $ctrl.assembly.scheduleStatus === 'G'}">
+				<span class="col-sm-3"><small>{{$ctrl.assembly.partNumber}}</small></span>
+				<span class="col-sm-5"><small>{{$ctrl.assembly.partDescription}}</small></span>
+				<span class="col-sm-2"><small>{{$ctrl.assembly.scheduleDaysLate}}</small></span>
+				<span class="col-sm-2"><small>{{$ctrl.assembly.scheduleQuantityLate}}</small></span>
+			</div>
+			<div class="col-sm-12" ng-repeat="assembly in $ctrl.assembly.truncatedChildren" ng-class="{'status-highlight-row-red' : assembly.scheduleStatus === 'R', 'status-highlight-row-yellow' : assembly.scheduleStatus === 'Y', 'status-highlight-row-green' : assembly.scheduleStatus === 'G'}">
+				<span class="col-sm-3"><small>{{assembly.partNumber}}</small></span>
+				<span class="col-sm-5"><small>{{assembly.partDescription}}</small></span>
+				<span class="col-sm-2"><small>{{assembly.scheduleDaysLate}}</small></span>
+				<span class="col-sm-2"><small>{{assembly.scheduleQuantityLate}}</small></span>
+			</div>	
 		</div>
-		<div class="col-sm-12">
-			<label class="col-sm-4">Supplier Name</label>
-			<span class="col-sm-8">{{$ctrl.assembly.partSupplierName}}</span>
+		<div uib-accordion-group class="panel-default" is-open="$ctrl.isSpcView">
+			<uib-accordion-heading>
+				<i class="fa fa-caret-down"></i> SPC Status<span class="pull-right"></span>
+			</uib-accordion-heading>
+			<div class="col-sm-12">
+				<span class="col-sm-3"><small>Part Number</small></span>
+				<span class="col-sm-9"><small>Reason</small></span>
+			</div>
+			<div class="col-sm-12" ng-class="{'status-highlight-row-red' : $ctrl.assembly.spcStatus === 'R', 'status-highlight-row-yellow' : $ctrl.assembly.spcStatus === 'Y', 'status-highlight-row-green' : $ctrl.assembly.spcStatus === 'G'}">
+				<span class="col-sm-3"><small>{{$ctrl.assembly.partNumber}}</small></span>
+				<span class="col-sm-9"><small>{{$ctrl.assembly.spcReason}}</small></span>
+			</div>
+			<div class="col-sm-12" ng-repeat="assembly in $ctrl.assembly.truncatedChildren" ng-class="{'status-highlight-row-red' : assembly.spcStatus === 'R', 'status-highlight-row-yellow' : assembly.spcStatus === 'Y', 'status-highlight-row-green' : assembly.spcStatus === 'G'}">
+				<span class="col-sm-3"><small>{{assembly.partNumber}}</small></span>
+				<span class="col-sm-9"><small>{{assembly.spcReason}}</small></span>
+			</div>
 		</div>
-		<div class="col-sm-12">
-			<label class="col-sm-4">Supplier Description</label>
-			<span class="col-sm-8">{{$ctrl.assembly.partSupplier}}</span>
+		<div uib-accordion-group class="panel-default" is-open="$ctrl.isQnoteView">
+			<uib-accordion-heading>
+				<i class="fa fa-caret-down"></i> QNote Status<span class="pull-right"></span>
+			</uib-accordion-heading>
+			<div class="col-sm-12">
+				<span class="col-sm-3"><small>Part Number</small></span>
+				<span class="col-sm-9"><small>Reason</small></span>
+			</div>
+			<div class="col-sm-12" ng-class="{'status-highlight-row-red' : $ctrl.assembly.qnoteStatus === 'R', 'status-highlight-row-yellow' : $ctrl.assembly.qnoteStatus === 'Y', 'status-highlight-row-green' : $ctrl.assembly.qnoteStatus === 'G'}">
+				<span class="col-sm-3"><small>{{$ctrl.assembly.partNumber}}</small></span>
+				<span class="col-sm-9"><small>{{$ctrl.assembly.qnoteReason}}</small></span>
+			</div>
+			<div class="col-sm-12" ng-repeat="assembly in $ctrl.assembly.truncatedChildren" ng-class="{'status-highlight-row-red' : assembly.qnoteStatus === 'R', 'status-highlight-row-yellow' : assembly.qnoteStatus === 'Y', 'status-highlight-row-green' : assembly.qnoteStatus === 'G'}">
+				<span class="col-sm-3"><small>{{assembly.partNumber}}</small></span>
+				<span class="col-sm-9"><small>{{assembly.qnoteReason}}</small></span>
+			</div>	
 		</div>
-		<div class="col-sm-12 ">
-			<uib-accordion close-others="false">
-				<div uib-accordion-group class="panel-default" is-open="$ctrl.isScheduleView">
-					<uib-accordion-heading>
-						<i class="fa fa-caret-down"></i> Schedule Status<span class="pull-right"></span>
-					</uib-accordion-heading>
-					<div class="col-sm-12">
-						<span class="col-sm-3"><small>Part Number</small></span>
-						<span class="col-sm-5"><small>Part Description</small></span>
-						<span class="col-sm-2"><small>Days Late</small></span>
-						<span class="col-sm-2"><small>Qty. Late</small></span>
-					</div>
-					<div class="col-sm-12" ng-class="{'status-highlight-row-red' : $ctrl.assembly.scheduleStatus === 'R', 'status-highlight-row-yellow' : $ctrl.assembly.scheduleStatus === 'Y', 'status-highlight-row-green' : $ctrl.assembly.scheduleStatus === 'G'}">
-						<span class="col-sm-3"><small>{{$ctrl.assembly.partNumber}}</small></span>
-						<span class="col-sm-5"><small>{{$ctrl.assembly.partDescription}}</small></span>
-						<span class="col-sm-2"><small>{{$ctrl.assembly.scheduleDaysLate}}</small></span>
-						<span class="col-sm-2"><small>{{$ctrl.assembly.scheduleQuantityLate}}</small></span>
-					</div>
-					<div class="col-sm-12" ng-repeat="assembly in $ctrl.assembly.truncatedChildren" ng-class="{'status-highlight-row-red' : assembly.scheduleStatus === 'R', 'status-highlight-row-yellow' : assembly.scheduleStatus === 'Y', 'status-highlight-row-green' : assembly.scheduleStatus === 'G'}">
-						<span class="col-sm-3"><small>{{assembly.partNumber}}</small></span>
-						<span class="col-sm-5"><small>{{assembly.partDescription}}</small></span>
-						<span class="col-sm-2"><small>{{assembly.scheduleDaysLate}}</small></span>
-						<span class="col-sm-2"><small>{{assembly.scheduleQuantityLate}}</small></span>
-					</div>	
-				</div>
-				<div uib-accordion-group class="panel-default" is-open="$ctrl.isSpcView">
-					<uib-accordion-heading>
-						<i class="fa fa-caret-down"></i> SPC Status<span class="pull-right"></span>
-					</uib-accordion-heading>
-					<div class="col-sm-12">
-						<span class="col-sm-3"><small>Part Number</small></span>
-						<span class="col-sm-9"><small>Reason</small></span>
-					</div>
-					<div class="col-sm-12" ng-class="{'status-highlight-row-red' : $ctrl.assembly.spcStatus === 'R', 'status-highlight-row-yellow' : $ctrl.assembly.spcStatus === 'Y', 'status-highlight-row-green' : $ctrl.assembly.spcStatus === 'G'}">
-						<span class="col-sm-3"><small>{{$ctrl.assembly.partNumber}}</small></span>
-						<span class="col-sm-9"><small>{{$ctrl.assembly.spcReason}}</small></span>
-					</div>
-					<div class="col-sm-12" ng-repeat="assembly in $ctrl.assembly.truncatedChildren" ng-class="{'status-highlight-row-red' : assembly.spcStatus === 'R', 'status-highlight-row-yellow' : assembly.spcStatus === 'Y', 'status-highlight-row-green' : assembly.spcStatus === 'G'}">
-						<span class="col-sm-3"><small>{{assembly.partNumber}}</small></span>
-						<span class="col-sm-9"><small>{{assembly.spcReason}}</small></span>
-					</div>
-				</div>
-				<div uib-accordion-group class="panel-default" is-open="$ctrl.isQnoteView">
-					<uib-accordion-heading>
-						<i class="fa fa-caret-down"></i> QNote Status<span class="pull-right"></span>
-					</uib-accordion-heading>
-					<div class="col-sm-12">
-						<span class="col-sm-3"><small>Part Number</small></span>
-						<span class="col-sm-9"><small>Reason</small></span>
-					</div>
-					<div class="col-sm-12" ng-class="{'status-highlight-row-red' : $ctrl.assembly.qnoteStatus === 'R', 'status-highlight-row-yellow' : $ctrl.assembly.qnoteStatus === 'Y', 'status-highlight-row-green' : $ctrl.assembly.qnoteStatus === 'G'}">
-						<span class="col-sm-3"><small>{{$ctrl.assembly.partNumber}}</small></span>
-						<span class="col-sm-9"><small>{{$ctrl.assembly.qnoteReason}}</small></span>
-					</div>
-					<div class="col-sm-12" ng-repeat="assembly in $ctrl.assembly.truncatedChildren" ng-class="{'status-highlight-row-red' : assembly.qnoteStatus === 'R', 'status-highlight-row-yellow' : assembly.qnoteStatus === 'Y', 'status-highlight-row-green' : assembly.qnoteStatus === 'G'}">
-						<span class="col-sm-3"><small>{{assembly.partNumber}}</small></span>
-						<span class="col-sm-9"><small>{{assembly.qnoteReason}}</small></span>
-					</div>	
-				</div>
-			</uib-accordion>
-		</div>
+	</uib-accordion>
+</div>

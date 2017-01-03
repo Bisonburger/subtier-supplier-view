@@ -1,6 +1,6 @@
 <div class="container-fluid">
 	<div id='rtn-loading-screen' ng-hide="$ctrl.loaded" ng-include="'layout/loading/loading.html'"></div>
-	<div ng-show="$ctrl.loaded" ng-cloak>
+	<div ng-show="$ctrl.loaded">
 		<div class="row">
 			<assembly-parentage></assembly-parentage>
 		</div>
@@ -8,22 +8,20 @@
 			<ng-sidebar class="js-side-nav side-nav">
 				<nav class="js-side-nav-container side-nav__container">
 					<button class="js-menu-hide side-nav__hide" ng-click="$ctrl.openSidebar()"><i class="fa fa-close"></i></button>
-					<header class="side-nav__header"> {{$ctrl.slideoutActive}} </header>
+					<header class="side-nav__header rtn-nav__header_margin_shift"> {{$ctrl.slideoutActive}} </header>
 					<bom-filter ng-show="$ctrl.slideoutActive === 'BOM Filter'" class="side-nav__content"></bom-filter>
 					<bom-tree-config ng-show="$ctrl.slideoutActive === 'BOM Configuration'" class="side-nav__content"></bom-tree-config>
 				</nav>
 			</ng-sidebar>
 			<div ng-class="{'col-sm-8':$ctrl.showDetail||$ctrl.showMinimap,'col-sm-12':!$ctrl.showDetail && !$ctrl.showMinimap}">
-				<ng-include class="col-sm-12" src="'pages/ssv/components/ssvView/toolbar-tmpl.html'" />
-				<bom-tree></bom-tree>			
+				<ng-include class="col-lg-4 col-md-5" src="'pages/ssv/components/ssvView/toolbar-tmpl.html'" />
+				<assembly-legend></assembly-legend>				
+				<bom-tree is-loaded="$ctrl.loaded" nodes="$ctrl.nodes" edges="$ctrl.edges" swimlanes="$ctrl.swimlanes"></bom-tree>	
 			</div>
-			<div class=col-sm-4 ng-if="$ctrl.showDetail || $ctrl.showMinimap">
-				<div class="row minimap" ng-if="$ctrl.showMinimap">
-					<div class="col-sm-12 side-nav__header">
-						<strong>Mini Map</strong>
-					</div>
-					<bom-tree class="bomtree" minimap="true" ></bom-tree>
-				</div>
+			<div class="col-sm-4" ng-if="$ctrl.showDetail || $ctrl.showMinimap">
+				<!-- 
+				<ng-include ng-if="$ctrl.showMinimap" src="'pages/ssv/components/bomTree/minimap/minimap-tmpl.html'"></ng-include>
+				-->
 				<assembly-view ng-if="$ctrl.showDetail"></assembly-view>
 			</div>
 		</div>

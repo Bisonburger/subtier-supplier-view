@@ -1,0 +1,12 @@
+<g id="swimlane">
+	<rect class="swimlane" 
+		  ng-attr-x="{{$ctrl.swimlane.x}}" ng-attr-y="{{$ctrl.swimlane.y}}" 
+		  ng-attr-width="{{$ctrl.swimlane.width}}" ng-attr-height="{{$ctrl.swimlane.height}}" 
+		  fill="url(#g2)"></rect>
+	<rect ng-style="{'fill': 'url( #watermark-{{$ctrl.level}})', 'fill-opacity':0.3}" 
+		  ng-attr-x="{{$ctrl.swimlane.x}}" ng-attr-y="{{$ctrl.swimlane.y}}" 
+		  ng-attr-width="{{$ctrl.swimlane.width}}" ng-attr-height="{{$ctrl.swimlane.height}}"></rect>
+	<text class="swimlane-text" 
+	      ng-attr-transform="translate({{$ctrl.swimlane.x+12}},{{$ctrl.swimlane.y+120}})rotate(-90)">
+	      {{($ctrl.isMaterialView)?'BOM':'Tier'}} Level {{$ctrl.level}}</text>
+</g>

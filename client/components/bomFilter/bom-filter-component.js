@@ -17,58 +17,139 @@
  */
 define( [], function(){ return BomFilterComponent; } );
 
+var angular = require('angular');
+
+/**
+ * Definition of the BomFilter component
+ * 
+ * @name bomFilter
+ * @module ssv.components
+ * 
+ */
 var BomFilterComponent = {
-    controller: ['$rootScope', 'SSVConfig', BomFilterCtrl],
+    controller: ['$rootScope', 'SSVConfig', 'LocalStorageSvc', BomFilterCtrl],
     templateUrl: 'pages/ssv/components/bomFilter/bom-filter-tmpl.html'
 };
 
-function BomFilterCtrl($rootScope,ssvConfig){
-    var ctrl = this;
+/**
+ * Controller for the BomFilter component
+ * 
+ * @name BomFilterController
+ * @param {service} $rootScope AngularJS rootScope service
+ * @param {SSVConfig} ssvConfig SSV configuration constants
+ * 
+ */
+function BomFilterCtrl($rootScope,ssvConfig,$localStorage){
     
+	/** @alias this */
+	var ctrl = this;
+	
+	ctrl.localMaterialFilters = [];
+	ctrl.localSupplierFilters = [];
+    
+    /** Controller initializer @function @see onInit @public */
     ctrl.$onInit = onInit;
-    ctrl.mapName = mapName;
+
+    /** Applies a filter change by broadcasting the bomFilterChanged event @function @see applyFilterChange @public */
     ctrl.applyFilterChange = applyFilterChange;
+
+    /** Create a new filter @function @see newFilter @public */
     ctrl.newFilter = newFilter;
+    
+    /** Remove the currentFilter @function @see removeFilter @public */
     ctrl.removeFilter = removeFilter;    
+    
+    /** Toggle active state for the currentFilter @function @see changeFilterActive @public */
     ctrl.changeFilterActive = changeFilterActive;
+    
+    ctrl.mappedFn = mapped;
         
     /**
      * Initializer for the BomFilter controller, called as part of the ON-INIT lifecycle hook
+     * 
+     * @private
      */
     function onInit(){
-    	ctrl.filters = [];
+    	ctrl.localMaterialFilters = JSON.parse($localStorage.get( 'ssv-material-filters' )) || [];
+    	ctrl.localSupplierFilters = JSON.parse($localStorage.get( 'ssv-supplier-filters' )) || [];
+    	
+    	ctrl.filters = ctrl.localMaterialFilters;
     	ctrl.currentFilter = null;
-    	newFilter(); // we'll add one filter
+    	if( !ctrl.filters || ctrl.filters.length === 0 ) newFilter(); // we'll add one filter
+    	ctrl.currentFilter = ctrl.filters[ ctrl.filters.length - 1 ];
     	ctrl.selectedColor = '#7bd148';
     	ctrl.selectType = 'highlight';
     	ctrl.attrValues = {};
-    	ctrl.attributes = ssvConfig.attributeList;
+    	ctrl.isMaterialView = true;
+    	
+    	ctrl.attrMaterial = [];
+    	ctrl.attrSupplier = [];
+    	
+		angular.forEach( Object.keys( ssvConfig ), function( attribute ){ 
+			if( ssvConfig[attribute].supplierView && !ssvConfig[attribute].noFilter )
+				ctrl.attrSupplier.push( attribute );
+			if( ssvConfig[attribute].materialView && !ssvConfig[attribute].noFilter)
+				ctrl.attrMaterial.push( attribute );
+		});
+		
+		ctrl.attributes = (ctrl.isMaterialView)? ctrl.attrMaterial : ctrl.attrSupplier;
+    	
     	ctrl.partNumber = null;
     	$rootScope.$on('bomTreeRootChanged', _handleChangedRoot);
     	$rootScope.$on('sideNavShow', _onShow );
     	$rootScope.$on('sideNavHide', _onHide );
-    };
+    	$rootScope.$on('bomTreeConfigChanged', _handleChangedConfig);
+    }
     
+    function mapped(input){
+    	return (ssvConfig[input] && ssvConfig[input].displayName)? ssvConfig[input].displayName : input;
+    }
+        
+    /**
+     * Handler for the sideNavShow event
+     * 
+     * @private
+     */
     function _onShow(){
     	if( !ctrl.filters || ctrl.filters.length < 1 )
     		newFilter(); // make sure we always have a filter ready...
+    	ctrl.currentFilter = ctrl.filters[ ctrl.filters.length - 1 ];
     }
     
+    /**
+     * Handler for the sideNavHide event
+     * 
+     * @private
+     */
     function _onHide(){
     	applyFilterChange(); // apply any changes we may have...
     }
     
-    function mapName( name ){
-    	return ( ssvConfig.attributeMap[name] )? ssvConfig.attributeMap[name] : name;
-    };
     
+    /**
+     * Applies a filter change by broadcasting the bomFilterChanged event
+     */
     function applyFilterChange(){
-    	if( ctrl.filterForm && !ctrl.filterForm.$submitted )
+    	if( ctrl.filterForm && !ctrl.filterForm.$submitted ){
+    		
     		$rootScope.$broadcast( 'bomFilterChanged', ctrl.filters? ctrl.filters : [] );
-    };
+    		if( ctrl.isMaterialView ){ ctrl.localMaterialFilters = ctrl.filters; }
+    		else{ ctrl.localSupplierFilters = ctrl.filters; }
+    		    		
+    		$localStorage.set( 'ssv-material-filters', JSON.stringify(ctrl.localMaterialFilters) );
+    		$localStorage.set( 'ssv-supplier-filters', JSON.stringify(ctrl.localSupplierFilters) );
+    	}
+    }
     
+    /**
+     * Fetches all the values for a particular attribute as found from the specified root down
+     * 
+     * @param {Assembly} root node/assembly to fetch values from
+     * @param {string} attr attribute name to fetch values for
+     * @return {Object[]} array of distinct values for the attribute as found in the tree starting with root
+     */
     function _fetchAllValuesForAttribute( root, attr ){
-    	if( !root ) return;
+    	if( !root || !attr ) return;
     	
     	if( !ctrl.attrValues[ attr ] )
     		ctrl.attrValues[ attr ] = [];
@@ -82,23 +163,84 @@ function BomFilterCtrl($rootScope,ssvConfig){
     		angular.forEach( root.children, function(child){ _fetchAllValuesForAttribute( child, attr ); } );
     	if( root._children && root._children.length > 0 ) 
     		angular.forEach( root._children, function(child){ _fetchAllValuesForAttribute( child, attr ); } );
-    };
+    }
     
     /**
      * Event handler for the bomTreeRootChanged event
+     * 
+     * @private
+     * @param {Event} event Event object that triggered the handler
+     * @param {{assembly:Assembly}} opts The data passed with the event
      */
     function _handleChangedRoot( event, opts ){
-    	angular.forEach( ctrl.attributes, function(attr){ 
+    	angular.forEach( ctrl.attrMaterial, function(attr){
     		_fetchAllValuesForAttribute( opts.assembly, attr );
+    		_addFilterAttributes(attr);
     	});    	
-    };
+    	angular.forEach( ctrl.attrSupplier, function(attr){ 
+    		_fetchAllValuesForAttribute( opts.assembly, attr );
+    		_addFilterAttributes(attr);
+    	});
+    }
+    
+    /**
+     * For the selected attribute loop over filters and check if the filter is currently selected
+     * 
+     * @private
+     * @param {String} attr The attribute to check against filters
+     */
+    function _addFilterAttributes(attr){
+    	this.attr = attr;
+		angular.forEach(ctrl.filters, function(filter){
+			angular.forEach(filter.selected, function(value, key){
+				if((key == this.attr) && value != "" && typeof value != 'undefined'){
+					_addFilterOption(key, value);
+				}
+			}, this);
+		}, this);
+    }
+    
+    function _addFilterOption(attr, value){
+    	var found = false;
+    	
+    	angular.forEach(ctrl.attrValues[attr], function(attrValue){
+    		if(attrValue == value){
+    			found = true;
+    		}
+    	});
+    	
+    	if(!found){
+    		ctrl.attrValues[ attr ].push( value);	
+    	}
+    }
+    
+    /**
+     * Event handler for the bomTreeConfigChanged event
+     * 
+     * @private
+     * @param {Event} event Event object that triggered the handler
+     * @param {{isMaterialView:boolean}} opts The data passed with the event
+     */
+    function _handleChangedConfig( event, opts ){
+    	if( opts.isMaterialView != ctrl.isMaterialView ){
+    		if( opts.isMaterialView ){ ctrl.localSupplierFilters = ctrl.filters; }
+    		else{ ctrl.localMaterialFilters = ctrl.filters;}
+    		ctrl.isMaterialView = opts.isMaterialView;
+    		ctrl.attributes = (ctrl.isMaterialView)? ctrl.attrMaterial : ctrl.attrSupplier;
+    		ctrl.filters = (ctrl.isMaterialView)? ctrl.localMaterialFilters : ctrl.localSupplierFilters ;
+    		if( !ctrl.filters || ctrl.filters.length === 0 ) newFilter();
+    		else{
+    			ctrl.currentFilter = ctrl.filters[ ctrl.filters.length - 1 ];
+    		}
+    	}
+    }
     
     /**
      * Create a new filter
      */
     function newFilter(){
     	ctrl.filters.push({ name: 'Filter ' + (ctrl.filters.length + 1), 
-    			       active: true, 
+    			       active: false, 
     			       selected: {}, 
     			       partNumber: null, 
     			       selectedColor: '#7bd148', 
@@ -108,22 +250,25 @@ function BomFilterCtrl($rootScope,ssvConfig){
     }
     
     /**
-     * Remove the currentFilter (as defined by ctrl.currentFilterIdx)
+     * Remove the currentFilter (as defined by ctrl.currentFilter)
      */
     function removeFilter(){
     	
     	var idx = -1;
-    	angular.forEach( ctrl.filters, function(filter,index){ if( filter === ctrl.currentFilter ) idx = index; })
+    	angular.forEach( ctrl.filters, function(filter,index){ if( filter === ctrl.currentFilter ) idx = index; });
     	if( idx >=0 ){ 
     		ctrl.filters.splice( idx,1 );    	   
     		ctrl.currentFilter = (ctrl.filters.length >= 0 )? ctrl.filters[0] : null;
     		applyFilterChange();
     	}
     	else{
-    		console.log( 'unable to find!')
+    		console.log( 'unable to find!');
     	}
     }
     
+    /**
+     * Toggles the active state of the currentFilter (as defined by ctrl.currentFilter)
+     */
     function changeFilterActive(){
     	ctrl.currentFilter.active = !ctrl.currentFilter.active;
     	applyFilterChange();

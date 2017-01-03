@@ -18,9 +18,9 @@
 				<i class="fa fa-caret-down"></i> Attribute Values <span class="pull-right badge">{{ $ctrl.currentFilter.selected.length }}</span>
 			</uib-accordion-heading>
 			
-			<div ng-repeat="attribute in $ctrl.attributes | orderBy">
+			<div ng-repeat="attribute in $ctrl.attributes | orderBy:$ctrl.mappedFn">
 				<div class="form-group">
-					<label class="col-sm-4 control-label" for="{{attribute}}">{{$ctrl.mapName( attribute ) | camelCaseToHuman }}</label> 
+					<label class="col-sm-4 control-label" for="{{attribute}}">{{attribute | mapped | camelCaseToHuman }}</label> 
 					<div class="col-sm-8">
 						<select id="{{attribute}}" class="form-control" ng-model="$ctrl.currentFilter.selected[attribute]">
 							<option value="">No Filter</option>

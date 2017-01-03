@@ -1,63 +1,48 @@
-		<div class="col-sm-12 side-nav__header">
-			<strong>Assembly Details</strong>
-		</div>
-		
-		
-		<div class="col-sm-12">
-			<label class="col-sm-4">Part Description</label>
-			<span class="col-sm-8">{{$ctrl.assembly.partDescription}}</span>
-		</div>
-		<div class="col-sm-12">
-			<label class="col-sm-4">Part Number</label>
-			<span class="col-sm-8">{{$ctrl.assembly.partNumber}}</span>
-		</div>
-		<div class="col-sm-12">
-			<label class="col-sm-4">Part Site</label>
-			<span class="col-sm-8">{{$ctrl.assembly.partSite}}</span>
-		</div>
-		<div class="col-sm-12">
-			<label class="col-sm-4">Supplier Name</label>
-			<span class="col-sm-8">{{$ctrl.assembly.partSupplierName}}</span>
-		</div>
-		<div class="col-sm-12">
-			<label class="col-sm-4">Supplier Description</label>
-			<span class="col-sm-8">{{$ctrl.assembly.partSupplier}}</span>
-		</div>
-		<div class="col-sm-12">
-			<label class="col-sm-4">Transfer Code</label>
-			<span class="col-sm-8">{{$ctrl.assembly.partMakeBuyTransfer}}</span>
-		</div>
-		<div class="col-sm-12">
-			<span class="col-sm-12 ssv-hr" style="">&nbsp;</span>
-		</div>
-		<div><h3><i class="fa fa-calendar"></i> Schedule</h3></div>
-		
-		<div class="col-sm-12" ng-class="{'status-highlight-row-red' : $ctrl.assembly.scheduleStatus === 'R', 'status-highlight-row-yellow' : $ctrl.assembly.scheduleStatus === 'Y', 'status-highlight-row-green' : $ctrl.assembly.scheduleStatus === 'G'}">
-			<label class="col-sm-4">Schedule Days Late</label>
-			<span class="col-sm-8">{{$ctrl.assembly.scheduleDaysLate || 'No Data'}}</span>
-		</div>
-		<div class="col-sm-12" ng-class="{'status-highlight-row-red' : $ctrl.assembly.scheduleStatus === 'R', 'status-highlight-row-yellow' : $ctrl.assembly.scheduleStatus === 'Y', 'status-highlight-row-green' : $ctrl.assembly.scheduleStatus === 'G'}">
-			<label class="col-sm-4">Schedule Quantity Late</label>
-			<span class="col-sm-8">{{$ctrl.assembly.scheduleQuantityLate || 'No Data'}}</span>
-		</div>
-		<div class="col-sm-12">
-			<span class="col-sm-12 ssv-hr" style="">&nbsp;</span>
-		</div>
-		<div><h3><i class="fa fa-line-chart"></i> Statistical Process Control</h3></div>
-
-		<div class="col-sm-12" ng-class="{'status-highlight-row-red' : $ctrl.assembly.spcStatus === 'R', 'status-highlight-row-yellow' : $ctrl.assembly.spcStatus === 'Y', 'status-highlight-row-green' : $ctrl.assembly.spcStatus === 'G'}">
-			<label class="col-sm-4">SPC Reason</label>
-			<span class="col-sm-8">{{$ctrl.assembly.spcReason || 'No Data'}}</span>
-		</div>
-		<div class="col-sm-12">
-			<span class="col-sm-12 ssv-hr" style="">&nbsp;</span>
-		</div>
-		<div><h3><i class="fa fa-edit"></i> Quality Notes</h3></div>
-
-		<div class="col-sm-12" ng-class="{'status-highlight-row-red' : $ctrl.assembly.qnoteStatus === 'R', 'status-highlight-row-yellow' : $ctrl.assembly.qnoteStatus === 'Y', 'status-highlight-row-green' : $ctrl.assembly.qnoteStatus === 'G'}">
-			<label class="col-sm-4">QNote Reason</label>
-			<span class="col-sm-8">{{$ctrl.assembly.qnoteReason || 'No Data'}}</span>
-		</div>
-		<div class="col-sm-12" ng-show="$ctrl.assembly.truncatedChildren.length > 0">
-			<span class="col-sm-12 ssv-hr" style="">&nbsp;</span>
-		</div>
+<div class="col-sm-12 view-header">
+	<strong>Assembly Details</strong><button type="button" class="btn btn-primary btn-xs pull-right" ng-click="$ctrl.saveFavorite($ctrl.assembly)" style="margin-top:4px;">Save As Favorite</button>
+</div>
+<div class="col-sm-12">
+	<label class="col-sm-4">Part Description</label> 
+	<span class="col-sm-8">{{$ctrl.assembly.partDescription || 'No Data'}}</span>
+</div>
+<div class="col-sm-12">
+	<label class="col-sm-4">Part Number</label> 
+	<span class="col-sm-8">{{$ctrl.assembly.partNumber || 'No Data'}}</span>
+</div>
+<div class="col-sm-12">
+	<label class="col-sm-4">CAGE Code</label> 
+	<span class="col-sm-8">{{$ctrl.assembly.partSite || 'No Data'}}</span>
+</div>
+<div class="col-sm-12">
+	<label class="col-sm-4">Supplier</label> 
+	<span class="col-sm-8">{{$ctrl.assembly.partSupplier || 'No Data'}}</span>
+</div>
+<div class="col-sm-12">
+	<label class="col-sm-4">Transfer Code</label> 
+	<span class="col-sm-8">{{$ctrl.assembly.partMakeBuyTransfer || 'No Data'}}</span>
+</div>
+<div class="col-sm-12"><span class="col-sm-12 ssv-hr" style="">&nbsp;</span></div>
+<div><h4><i class="fa fa-calendar"></i> Schedule</h4></div>
+<div class="col-sm-12" ng-class="{'status-highlight-row-red' : $ctrl.assembly.scheduleStatus === 'R', 'status-highlight-row-yellow' : $ctrl.assembly.scheduleStatus === 'Y', 'status-highlight-row-green' : $ctrl.assembly.scheduleStatus === 'G'}">
+	<label class="col-sm-4">Schedule Days Late</label> 
+	<span class="col-sm-8">{{$ctrl.assembly.scheduleDaysLate || 'No Data'}}</span>
+</div>
+<div class="col-sm-12" ng-class="{'status-highlight-row-red' : $ctrl.assembly.scheduleStatus === 'R', 'status-highlight-row-yellow' : $ctrl.assembly.scheduleStatus === 'Y', 'status-highlight-row-green' : $ctrl.assembly.scheduleStatus === 'G'}">
+	<label class="col-sm-4">Schedule Quantity Late</label> 
+	<span class="col-sm-8">{{$ctrl.assembly.scheduleQuantityLate || 'No Data'}}</span>
+</div>
+<div class="col-sm-12"><span class="col-sm-12 ssv-hr" style="">&nbsp;</span></div>
+<div><h4><i class="fa fa-line-chart"></i> Statistical Process Control</h4></div>
+<div class="col-sm-12" ng-class="{'status-highlight-row-red' : $ctrl.assembly.spcStatus === 'R', 'status-highlight-row-yellow' : $ctrl.assembly.spcStatus === 'Y', 'status-highlight-row-green' : $ctrl.assembly.spcStatus === 'G'}">
+	<label class="col-sm-4">SPC Reason</label> 
+	<span class="col-sm-8">{{$ctrl.assembly.spcReason || 'No Data'}}</span>
+</div>
+<div class="col-sm-12"><span class="col-sm-12 ssv-hr" style="">&nbsp;</span></div>
+<div><h4><i class="fa fa-edit"></i> Quality Notes</h4></div>
+<div class="col-sm-12" ng-class="{'status-highlight-row-red' : $ctrl.assembly.qnoteStatus === 'R', 'status-highlight-row-yellow' : $ctrl.assembly.qnoteStatus === 'Y', 'status-highlight-row-green' : $ctrl.assembly.qnoteStatus === 'G'}">
+	<label class="col-sm-4">QNote Reason</label> 
+	<span class="col-sm-8">{{$ctrl.assembly.qnoteReason || 'No Data'}}</span>
+</div>
+<div class="col-sm-12" ng-show="$ctrl.assembly.truncatedChildren.length &gt; 0">
+	<span class="col-sm-12 ssv-hr" style="">&nbsp;</span>
+</div>
