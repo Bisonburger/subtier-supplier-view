@@ -40,12 +40,12 @@ var BomFilterComponent = {
  * 
  */
 function BomFilterCtrl($rootScope,ssvConfig,$localStorage){
-    
 	/** @alias this */
 	var ctrl = this;
 	
 	ctrl.localMaterialFilters = [];
 	ctrl.localSupplierFilters = [];
+	ctrl.filters = [];
     
     /** Controller initializer @function @see onInit @public */
     ctrl.$onInit = onInit;
@@ -63,16 +63,19 @@ function BomFilterCtrl($rootScope,ssvConfig,$localStorage){
     ctrl.changeFilterActive = changeFilterActive;
     
     ctrl.mappedFn = mapped;
+    
+    /** Clears the local storage @function @see clearFilterStorage @public */
+    ctrl.clearFilterStorage = clearFilterStorage;
         
     /**
      * Initializer for the BomFilter controller, called as part of the ON-INIT lifecycle hook
      * 
      * @private
      */
-    function onInit(){
-    	ctrl.localMaterialFilters = JSON.parse($localStorage.get( 'ssv-material-filters' )) || [];
-    	ctrl.localSupplierFilters = JSON.parse($localStorage.get( 'ssv-supplier-filters' )) || [];
-    	
+    function onInit(){    	
+    	ctrl.localMaterialFilters = ($localStorage.get( 'ssv-material-filters' ) != 'undefined' && $localStorage.get( 'ssv-material-filters' ) != null) ? JSON.parse($localStorage.get( 'ssv-material-filters' )) : [];
+    	ctrl.localSupplierFilters = ($localStorage.get( 'ssv-supplier-filters' ) != 'undefined' && $localStorage.get( 'ssv-supplier-filters' ) != null) ? JSON.parse($localStorage.get( 'ssv-supplier-filters' )) : [];
+    	    	
     	ctrl.filters = ctrl.localMaterialFilters;
     	ctrl.currentFilter = null;
     	if( !ctrl.filters || ctrl.filters.length === 0 ) newFilter(); // we'll add one filter
@@ -92,13 +95,17 @@ function BomFilterCtrl($rootScope,ssvConfig,$localStorage){
 				ctrl.attrMaterial.push( attribute );
 		});
 		
-		ctrl.attributes = (ctrl.isMaterialView)? ctrl.attrMaterial : ctrl.attrSupplier;
+		ctrl.attributes = ctrl.attrMaterial;
     	
     	ctrl.partNumber = null;
     	$rootScope.$on('bomTreeRootChanged', _handleChangedRoot);
     	$rootScope.$on('sideNavShow', _onShow );
     	$rootScope.$on('sideNavHide', _onHide );
     	$rootScope.$on('bomTreeConfigChanged', _handleChangedConfig);
+    }
+    
+    function clearFilterStorage(){
+    	$localStorage.clear();
     }
     
     function mapped(input){
@@ -111,8 +118,9 @@ function BomFilterCtrl($rootScope,ssvConfig,$localStorage){
      * @private
      */
     function _onShow(){
-    	if( !ctrl.filters || ctrl.filters.length < 1 )
-    		newFilter(); // make sure we always have a filter ready...
+    	if( !ctrl.filters || ctrl.filters.length < 1 ){
+    		newFilter(); // make sure we always have a filter ready...    		
+    	}
     	ctrl.currentFilter = ctrl.filters[ ctrl.filters.length - 1 ];
     }
     
@@ -148,30 +156,43 @@ function BomFilterCtrl($rootScope,ssvConfig,$localStorage){
      * @param {string} attr attribute name to fetch values for
      * @return {Object[]} array of distinct values for the attribute as found in the tree starting with root
      */
-    function _fetchAllValuesForAttribute( root, attr ){
-    	if( !root || !attr ) return;
-    	
-    	if( !ctrl.attrValues[ attr ] )
-    		ctrl.attrValues[ attr ] = [];
-   		if( root[attr] ){
-   			var idx = ctrl.attrValues[ attr ].indexOf( root[attr] );
-   			if( idx < 0 )
-   				ctrl.attrValues[ attr ].push( root[attr] );
-   		}
-    	
-    	if( root.children && root.children.length > 0 ) 
-    		angular.forEach( root.children, function(child){ _fetchAllValuesForAttribute( child, attr ); } );
-    	if( root._children && root._children.length > 0 ) 
-    		angular.forEach( root._children, function(child){ _fetchAllValuesForAttribute( child, attr ); } );
-    }
+	    function _fetchAllValuesForAttribute(root, attr) {
+		if (!root || !attr){
+			return;
+		}
+		
+		if (!ctrl.attrValues[attr]){
+			ctrl.attrValues[attr] = [];			
+		}
+
+		if (root[attr]) {
+			var idx = ctrl.attrValues[attr].indexOf(root[attr]);
+			if (idx < 0)
+				ctrl.attrValues[attr].push(root[attr]);
+		}
+
+		if (root.children && root.children.length > 0){
+			angular.forEach(root.children, function(child) {
+				_fetchAllValuesForAttribute(child, attr);
+			});			
+		}
+		
+		if (root._children && root._children.length > 0){
+			angular.forEach(root._children, function(child) {
+				_fetchAllValuesForAttribute(child, attr);
+			});			
+		}
+	}
     
     /**
-     * Event handler for the bomTreeRootChanged event
-     * 
-     * @private
-     * @param {Event} event Event object that triggered the handler
-     * @param {{assembly:Assembly}} opts The data passed with the event
-     */
+	 * Event handler for the bomTreeRootChanged event
+	 * 
+	 * @private
+	 * @param {Event}
+	 *            event Event object that triggered the handler
+	 * @param {{assembly:Assembly}}
+	 *            opts The data passed with the event
+	 */
     function _handleChangedRoot( event, opts ){
     	angular.forEach( ctrl.attrMaterial, function(attr){
     		_fetchAllValuesForAttribute( opts.assembly, attr );
@@ -223,13 +244,19 @@ function BomFilterCtrl($rootScope,ssvConfig,$localStorage){
      */
     function _handleChangedConfig( event, opts ){
     	if( opts.isMaterialView != ctrl.isMaterialView ){
-    		if( opts.isMaterialView ){ ctrl.localSupplierFilters = ctrl.filters; }
-    		else{ ctrl.localMaterialFilters = ctrl.filters;}
+    		if( opts.isMaterialView ){
+    			ctrl.localSupplierFilters = ctrl.filters;
+    		} else {
+    			ctrl.localMaterialFilters = ctrl.filters;
+    		}
+    		
     		ctrl.isMaterialView = opts.isMaterialView;
     		ctrl.attributes = (ctrl.isMaterialView)? ctrl.attrMaterial : ctrl.attrSupplier;
-    		ctrl.filters = (ctrl.isMaterialView)? ctrl.localMaterialFilters : ctrl.localSupplierFilters ;
-    		if( !ctrl.filters || ctrl.filters.length === 0 ) newFilter();
-    		else{
+    		ctrl.filters = (ctrl.isMaterialView)? ctrl.localMaterialFilters : ctrl.localSupplierFilters;
+    		
+    		if( !ctrl.filters || ctrl.filters.length === 0 ){
+    			newFilter();
+    		} else {
     			ctrl.currentFilter = ctrl.filters[ ctrl.filters.length - 1 ];
     		}
     	}
@@ -260,9 +287,6 @@ function BomFilterCtrl($rootScope,ssvConfig,$localStorage){
     		ctrl.filters.splice( idx,1 );    	   
     		ctrl.currentFilter = (ctrl.filters.length >= 0 )? ctrl.filters[0] : null;
     		applyFilterChange();
-    	}
-    	else{
-    		console.log( 'unable to find!');
     	}
     }
     

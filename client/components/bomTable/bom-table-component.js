@@ -27,6 +27,8 @@ function BomTableCtrl($scope, $rootScope, AssemblySvc){
 	ctrl.zoomToAssembly = zoomToAssembly;
 	ctrl.clearSearch = clearSearch;
 	ctrl.resetView = resetView;
+	ctrl.handleOpenTable = handleOpenTable;
+	ctrl.handleCloseTable = handleCloseTable;
 
 	function onInit(){
 		$rootScope.$on('bomTreeRootChanged', handleChangedRoot);
@@ -139,7 +141,7 @@ function BomTableCtrl($scope, $rootScope, AssemblySvc){
 					} else if(a.spcStatus == "G" && b.spcStatus == "Y"){
 						return 1;
 					}
-				} else if(ctrl.isQnoteView){
+				} else {
 					if(typeof a.qnoteStatus == 'undefined' && typeof b.qnoteStatus == 'undefined'){
 						return 0;
 					} else if(typeof a.qnoteStatus == 'undefined' && typeof b.qnoteStatus != 'undefined'){
@@ -159,7 +161,7 @@ function BomTableCtrl($scope, $rootScope, AssemblySvc){
 					} else if(a.qnoteStatus == "G" && b.qnoteStatus == "Y"){
 						return 1;
 					}
-				}	
+				} 
 			} else {
 				if(ctrl.isScheduleView){
 					if(typeof a.scheduleStatusWorstCase == 'undefined' && typeof b.scheduleStatusWorstCase == 'undefined'){
@@ -201,7 +203,7 @@ function BomTableCtrl($scope, $rootScope, AssemblySvc){
 					} else if(a.spcStatusWorstCase == "G" && b.spcStatusWorstCase == "Y"){
 						return 1;
 					}
-				} else if(ctrl.isQnoteView){
+				} else {
 					if(typeof a.qnoteStatusWorstCase == 'undefined' && typeof b.qnoteStatusWorstCase == 'undefined'){
 						return 0;
 					} else if(typeof a.qnoteStatusWorstCase == 'undefined' && typeof b.qnoteStatusWorstCase != 'undefined'){
@@ -260,9 +262,7 @@ function BomTableCtrl($scope, $rootScope, AssemblySvc){
 	}
 	
 	function clearSearch(){
-		if(ctrl.search){
-			ctrl.search = {};
-		}
+		ctrl.search = {};
 	}
 	
 	function resetView(){

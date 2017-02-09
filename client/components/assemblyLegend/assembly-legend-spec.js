@@ -1,9 +1,7 @@
-
 define(['ssv', 'angular-mocks'], function() {
 	/* global expect inject */
 
 	describe('Test assembly-legend-component controller', function() {
-
 		var $componentController;
 		var $rootScope;
 		var $ctrl;
@@ -16,9 +14,7 @@ define(['ssv', 'angular-mocks'], function() {
 			$ctrl.$onInit(); // need to manually fire initialization
 		}));
 
-
 		it('should initialize to material view', function() {
-
 			expect($ctrl).toBeDefined();
 			expect($ctrl.isMaterialView).toBe(true);
 			expect($ctrl.isSupplierView).toBe(false);
@@ -37,6 +33,49 @@ define(['ssv', 'angular-mocks'], function() {
 			});
 			expect($ctrl.isMaterialView).toBe(true);
 		});
-
+		
+		it('should set supplier view when bomTreeConfigChanged event is triggered', function() {
+			$rootScope.$broadcast('bomTreeConfigChanged', {
+				isSupplierView: false
+			});
+			expect($ctrl.isSupplierView).toBe(false);
+			$rootScope.$broadcast('bomTreeConfigChanged', {
+				isSupplierView: true
+			});
+			expect($ctrl.isSupplierView).toBe(true);
+		});
+		
+		it('should set schedule view when bomTreeConfigChanged event is triggered', function() {
+			$rootScope.$broadcast('bomTreeConfigChanged', {
+				isScheduleView: false
+			});
+			expect($ctrl.isScheduleView).toBe(false);
+			$rootScope.$broadcast('bomTreeConfigChanged', {
+				isScheduleView: true
+			});
+			expect($ctrl.isScheduleView).toBe(true);
+		});
+		
+		it('should set spc view when bomTreeConfigChanged event is triggered', function() {
+			$rootScope.$broadcast('bomTreeConfigChanged', {
+				isSpcView: false
+			});
+			expect($ctrl.isSpcView).toBe(false);
+			$rootScope.$broadcast('bomTreeConfigChanged', {
+				isSpcView: true
+			});
+			expect($ctrl.isSpcView).toBe(true);
+		});
+		
+		it('should set qnote view when bomTreeConfigChanged event is triggered', function() {
+			$rootScope.$broadcast('bomTreeConfigChanged', {
+				isQnoteView: false
+			});
+			expect($ctrl.isQnoteView).toBe(false);
+			$rootScope.$broadcast('bomTreeConfigChanged', {
+				isQnoteView: true
+			});
+			expect($ctrl.isQnoteView).toBe(true);
+		});
 	});
 });

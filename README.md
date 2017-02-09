@@ -25,7 +25,7 @@ an environment variable `SSV_IP` and set it to the domain name or IP of the serv
 Data is being served from the [data/data.xlsx](./data/data.xlsx) file for favorites and material view and from the [data/raytheon-supplier-2.json](./data/raytheon-supplier2.json) file for supplier data.  
 Favorites and Material view data is dynamic (that is, you can change the xlsx file and refresh to see the data change).  For supplier data this is 'pre-cached' in the server - meaning any changes require a restart of the server.
 
-## Installation details 
+## Installation details
 
 ### Required:
 * [nodejs](https://nodejs.org/)
@@ -44,7 +44,7 @@ Favorites and Material view data is dynamic (that is, you can change the xlsx fi
 
 > Note that other packages (namely the dependencies of these packages) will be installed and appear under node_modules.
 
-## Making SSV fully self-contained
+## Making SSC fully self-contained
 SSV is "mostly" self-contained with the following exceptions:
 
 1) CSS files:  ssv needs the css files under src/main/resources/static/css; you could copy them to a local/css directory to be fully self contained with css files

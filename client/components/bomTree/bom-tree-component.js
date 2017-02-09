@@ -18,7 +18,7 @@
 define([], function() {return BOMTreeComponent;});
 
 var angular = require('angular');
-var d3 = require('d3')
+var d3 = require('d3');
 
 /**
  * Definition of the BOMTree component
@@ -36,14 +36,13 @@ var BOMTreeComponent = {
 		isLoaded: '='
 	},
 	templateUrl : 'pages/ssv/components/bomTree/bom-tree-tmpl.html',
-	controller : [ '$log', '$scope', '$rootScope', '$timeout', '$window', 'LocalStorageSvc', 'SSVConfig', 'AssemblySvc', BOMTreeController ],
+	controller : [ '$scope', '$rootScope', '$timeout', '$window', 'LocalStorageSvc', 'SSVConfig', 'AssemblySvc', BOMTreeController ],
 };
 
 /**
  * Controller for the BOMTree component
  * 
  * @name BOMTreeController
- * @param {service} $log AngularJS log service
  * @param {service} $scope AngularJS current scope service
  * @param {service} $rootScope AngularJS rootScope service
  * @param {service} $timeout AngularJS timeout service
@@ -51,7 +50,7 @@ var BOMTreeComponent = {
  * @param {AssemblySvc} AssemblySvc SSV Assembly service
  * 
  */
-function BOMTreeController($log, $scope, $rootScope, $timeout, $window, $localStorage, ssvConfig, AssemblySvc) {
+function BOMTreeController($scope, $rootScope, $timeout, $window, $localStorage, ssvConfig, AssemblySvc) {
 	
 	/** @var {number} default vertical separation between nodes */
     var verticalSeparation = 160;
@@ -75,37 +74,6 @@ function BOMTreeController($log, $scope, $rootScope, $timeout, $window, $localSt
     /** Compute the SVG path to draw between nodes @function @see computePath @public */
     ctrl.computePath = computePath;    
     
-    
-    ctrl.setupDownload = function(){
-    	//get svg element.
-    	var svg = d3.select("#svgContent");
-    	
-    	console.log( svg[0][0] );
-
-    	//get svg source.
-    	var serializer = new $window.XMLSerializer();
-    	var source = serializer.serializeToString(svg[0][0]);
-
-    	//add name spaces.
-    	if(!source.match(/^<svg[^>]+xmlns="http\:\/\/www\.w3\.org\/2000\/svg"/)){
-    	    source = source.replace(/^<svg/, '<svg xmlns="http://www.w3.org/2000/svg"');
-    	}
-    	if(!source.match(/^<svg[^>]+"http\:\/\/www\.w3\.org\/1999\/xlink"/)){
-    	    source = source.replace(/^<svg/, '<svg xmlns:xlink="http://www.w3.org/1999/xlink"');
-    	}
-
-    	//add xml declaration
-    	source = '<?xml version="1.0" standalone="no"?>\r\n' + source;
-
-    	//convert svg source to URI data scheme.
-    	var url = "data:image/svg+xml;charset=utf-8,"+encodeURIComponent(source);
-
-    	//set url value to a element's href attribute.
-    	ctrl.downloadLink = url;
-    	//you can download svg file by right click menu.	
-    };
-    
-    ctrl.downloadLink = "#";
     /**
      * Calculate the vertical separation between nodes.  Separation is based on the
      * number of attributes showing within the node (with a minimum)
@@ -317,8 +285,7 @@ function BOMTreeController($log, $scope, $rootScope, $timeout, $window, $localSt
     			ctrl.root = opts.assembly;	
     		} else {
     			var newRoot = findNode( ctrl.originalRoot, opts.assembly.id);
-    			if( newRoot ) ctrl.root = newRoot;
-    			else $log.debug( "Unable to find the root in the original" );    		
+    			if( newRoot ) ctrl.root = newRoot;    		
     		}
     		
     		if( ctrl.root ) selectAssembly( ctrl.root );
@@ -441,15 +408,11 @@ function BOMTreeController($log, $scope, $rootScope, $timeout, $window, $localSt
     
     function expandAssembly(assembly){
         if( assembly._children ){
-        	if( !assembly.children ){
-        		assembly.children = assembly._children;
-        		assembly._children = null;
-        	}
+    		assembly.children = assembly._children;
+    		assembly._children = null;
         } else {
-        	if( !assembly._children ){
-        		assembly._children = assembly.children;
-        		assembly.children = null;
-        	}
+    		assembly._children = assembly.children;
+    		assembly.children = null;
         }
         updateTree(false, assembly);  
         selectAssembly(assembly);
@@ -578,20 +541,16 @@ function BOMTreeController($log, $scope, $rootScope, $timeout, $window, $localSt
     			node.color = node.getColor('spc');	        			
     		} else if(ctrl.config.isQnoteView){
     			node.color = node.getColor('qnote');
-    		} else if(ctrl.config.isScheduleView){
-    			node.color = node.getColor('schedule');
     		} else {
-    			node.color = 'no-data';
+    			node.color = node.getColor('schedule');
     		}
     	} else {
     		if(ctrl.config.isSpcView){
     			node.color = node.getWorstCaseColor('spc');	        			
     		} else if(ctrl.config.isQnoteView){
     			node.color = node.getWorstCaseColor('qnote');
-    		} else if(ctrl.config.isScheduleView){
+    		} else { 
     			node.color = node.getWorstCaseColor('schedule');
-    		} else {
-    			node.color = 'no-data';
     		}
     	}
     	

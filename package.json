@@ -1,22 +1,25 @@
 {
-  "name": "ssv-local",
-  "version": "0.0.1",
-  "description": "Sub-tier Supplier Local",
-  "main": "server.js",
-  "private": true,
-  "author": "Matt Young <matthew.young@bisonworks.com>",
-  "dependencies": {
-    "angular": "^1.5.8",
-    "angular-animate": "^1.5.8",
-    "angular-ui-bootstrap": "^0.14.3",
-    "angular-ui-router": "^0.2.18",
-    "bootstrap": "^3.3.7",
-    "bootswatch": "^3.3.7",
-    "compression": "^1.6.2",
-    "d3": "~3",
-    "express": "~4",
-    "font-awesome": "^4.6.3",
-    "jquery": "^2.2.4",
-    "requirejs": "^2.3.2"
-  }
+	"name":"ssv-local",
+	"version":"0.0.1",
+	"description":"Sub-tier Supplier Local",
+	"main":"server.js",
+	"private":true,
+	"author":"Matt Young <matthew.young@bisonworks.com>",
+	"dependencies":{
+		"alasql":"^0.3.4",
+		"angular":"1.5.8",
+		"angular-animate":"1.5.8",
+		"angular-ui-bootstrap":"0.14.3",
+		"angular-ui-router":"0.2.18",
+		"bootstrap":"3.3.7",
+		"bootswatch":"3.3.7",
+		"d3":"~3",
+		"express":"~4",
+		"font-awesome":"4.6.3",
+		"jquery":"2.2.4",
+		"requirejs":"2.3.2"
+	},
+	"scripts":{
+		"clean": "rm -Rf node_modules"
+	}
 }

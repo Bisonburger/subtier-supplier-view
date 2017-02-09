@@ -92,7 +92,7 @@ function BOMTreeConfigController($rootScope, $scope, $stateParams, ssvConfig, As
 				ctrl.selectedMaterial[attribute] = ssvConfig[attribute].materialViewChecked;
 		});
 		
-		ctrl.selected = (ctrl.isMaterialView)? ctrl.selectedMaterial : ctrl.selectedSupplier;
+		ctrl.selected = ctrl.selectedMaterial;
 
 		ctrl.attributes = Object.keys( ctrl.selected );				
 		$scope.$watch( function(){ return ctrl.selected; }, _triggerConfigChange, true ); 		

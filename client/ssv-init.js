@@ -7,7 +7,7 @@
  *   - Read in the endpoint constants
  *   - Set up the alertService Service from RefApp5 (used to display info, warnings)
  */
- define(['angular','ssv','js/ui-router.states', 'js/endpoints', 'js/alert-service'],         
+define(['angular','ssv','js/ui-router.states', 'js/endpoints', 'js/alert-service'],         
 function(angular,ssv,states,endpoints,alertService){
 	
     ssv.config(function($stateProvider, $compileProvider, $urlRouterProvider, $qProvider) {

@@ -26,7 +26,7 @@ var angular = require('angular');
  * 
  */
 var FavoriteListComponent = {
-    controller: [ '$state', 'FavoriteSvc', FavoriteListCtrl],
+    controller: [ 'FavoriteSvc', FavoriteListCtrl],
     templateUrl: 'pages/ssv/components/favorite/favoriteList/favorite-list-tmpl.html'
 };
 
@@ -34,13 +34,14 @@ var FavoriteListComponent = {
  * Controller for the FavoriteList component
  * 
  * @name FavoriteListCtrl
- * @param {service} $state ui-router state management service
  * @param {FavoriteSvc} FavoriteSvc SSV Assembly service
  */
-function FavoriteListCtrl( $state, FavoriteSvc ){
+function FavoriteListCtrl( FavoriteSvc ){
 	
 	/** @alias this */
     var ctrl = this;
+    ctrl.loaded = false;
+    ctrl.favorites;
 
     /** Controller initializer @function @see onInit @public */    
     ctrl.$onInit = onInit;

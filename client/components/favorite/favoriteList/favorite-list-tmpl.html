@@ -1,6 +1,6 @@
 <div class="container-fluid">
 	<div id='rtn-loading-screen' ng-hide="$ctrl.loaded" ng-include="'layout/loading/loading.html'"></div>
-	<div ng-if="$ctrl.loaded" ng-cloak>
+	<div id='loaded' ng-if="$ctrl.loaded" ng-cloak>
 		<div class="row">
 			<h1 class="page-header">
 				<span class="fa fa-list-alt"></span> My Favorites
@@ -8,9 +8,18 @@
 			</h1>
 		</div>
 		<div class="row">
+			<!--
+				<button class="btn btn-sm btn-primary card col-md-3" ui-sref="app.favorite-details" style="height:20vh;text-align:center">
+					<span class="fa-stack fa-4x">
+						<i class="fa fa-plus fa-stack-1x"></i>
+						<i class="fa fa-circle-o fa-stack-2x"></i>
+					</span>
+					<div><strong>Add Favorite</strong></div>
+				</button>
+			-->
 			<ng-include class="col-md-3" ng-repeat="favorite in $ctrl.favorites" src="'pages/ssv/components/favorite/favoriteList/favorite-card-tmpl.html'"></ng-include>
 		</div>
-		<div class="row" ng-show="$ctrl.favorites.length == 0" ng-cloak>
+		<div id="no-favorites-showing" class="row" ng-show="$ctrl.favorites.length == 0" ng-cloak>
 			<div class="col-sm-8 col-sm-push-2">
 				<h2>Welcome to Sub-Tier Supplier Visibility (SSV)</h2>
 				

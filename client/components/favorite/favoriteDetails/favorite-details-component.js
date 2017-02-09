@@ -43,6 +43,7 @@ function FavoriteDetailsCtrl( $scope, $state, $stateParams, alertService, Assemb
 	/** @alias this */
     var ctrl = this;
     
+    ctrl.favorite;
     ctrl.partSelected = false;
     ctrl.selectedPart;
     ctrl.foundParts;
@@ -136,7 +137,6 @@ function FavoriteDetailsCtrl( $scope, $state, $stateParams, alertService, Assemb
 	 * Initialize the controller
 	 */
     function onInit(){
-        ctrl.favorite;    
         ctrl.loaded = false;
         ctrl.isAdd = false;
         ctrl.matchingAssemblies = [];
@@ -150,7 +150,6 @@ function FavoriteDetailsCtrl( $scope, $state, $stateParams, alertService, Assemb
 			ctrl.partSelected = false;
 			ctrl.isAdd = true;
 			ctrl.loaded = true;
-			ctrl.favorite = null;
 			ctrl.favorite = FavoriteSvc.create();
 		}
     }
