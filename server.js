@@ -36,9 +36,6 @@ app.use('/js', express.static(path.resolve(__dirname, './client')));
 app.use('/', express.static(path.resolve(__dirname, './client')));
 app.use('/pages/ssv', express.static(path.resolve(__dirname, './client')));
 
-// fix for webjars...
-app.use( '/webjars/common-client-assets/v1', express.static(path.resolve(__dirname, './client')));
-
 //
 ////Setup mappings for third-party libraries
 app.use('/angular', express.static(path.resolve(__dirname, 'node_modules/angular')));

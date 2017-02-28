@@ -18,7 +18,7 @@ define( [ 'angular',
           './assembly-service', 
           './favorite-service',
           './supplier-service',
-          'js/angularjs-services/local-storage-service'
+          './local-storage-service'
         ],
 
 /**

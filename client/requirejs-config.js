@@ -14,7 +14,7 @@ requirejs.config({
 		'd3': 'd3/d3.min', 
 		'ngSidebar': 'directives/ngSidebar',
 		'ngColorPicker': 'directives/ngColorPicker',
-		'ssv': 'ssv',
+		'ssv': 'pages/ssv/ssv',
 		'ssv-init': 'ssv-init'
 	},
 	shim : {
@@ -57,6 +57,6 @@ requirejs.onError = function (err) {
  	console.log( err );
 };
 
-requirejs(['ssv','ssv-init'], function() {
+requirejs(['angular','ssv','ssv-init'], function(angular) {
 	angular.bootstrap(document, [ 'ssv' ]);
 });

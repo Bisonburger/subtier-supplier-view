@@ -7,13 +7,17 @@
  *   - Read in the endpoint constants
  *   - Set up the alertService Service from RefApp5 (used to display info, warnings)
  */
-define(['angular','ssv','js/ui-router.states', 'js/endpoints', 'js/alert-service'],         
+define(['angular',
+         'ssv',
+         'js/ui-router.states', 
+         'js/endpoints', 
+         'js/alert-service' ],
+         
 function(angular,ssv,states,endpoints,alertService){
 	
-    ssv.config(function($stateProvider, $compileProvider, $urlRouterProvider, $qProvider) {
+    ssv.config(function($stateProvider, $compileProvider, $urlRouterProvider) {
     	
     	$compileProvider.debugInfoEnabled(false);
-    	$qProvider.errorOnUnhandledRejections( false );
     	$urlRouterProvider.otherwise(function($injector, $location) { return ($location.$$port == null)? 'favorites' : states.otherwise; });
         $urlRouterProvider.when('', states.when);
         angular.forEach(states.states, function(value, key) { if( key !== 'app' ) $stateProvider.state(key, value); });
